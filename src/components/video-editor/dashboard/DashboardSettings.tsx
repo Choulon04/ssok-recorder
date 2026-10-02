@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/toast";
 import { supportsHudCaptureProtection } from "@/lib/hudCaptureProtection";
+import { AboutAttribution } from "@/components/about/AboutAttribution";
 import { SettingsRow } from "../SettingsRow";
 import { SettingsCategory, SettingsSections } from "../SettingsSections";
 export const DashboardSettingsContext = createContext<ReactNode>(null);
@@ -158,6 +159,7 @@ export function DashboardSettings({ onImportFile }: { onImportFile: () => Promis
 					</p>
 				</SettingsCategory>
 			</SettingsSections>
+			<AboutAttribution />
 		</section>
 	);
 }

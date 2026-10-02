@@ -17,11 +17,15 @@ describe("wallpapers", () => {
 	});
 
 	it("keeps the curated wallpaper list and default path aligned", () => {
-		expect(DEFAULT_WALLPAPER_PATH).toBe("/wallpapers/tahoe-light.jpg");
-		expect(DEFAULT_WALLPAPER_RELATIVE_PATH).toBe("wallpapers/tahoe-light.jpg");
+		expect(DEFAULT_WALLPAPER_PATH).toBe("/wallpapers/ssok-aurora.jpg");
+		expect(DEFAULT_WALLPAPER_RELATIVE_PATH).toBe("wallpapers/ssok-aurora.jpg");
 		expect(BUILT_IN_WALLPAPERS.at(0)?.publicPath).toBe(DEFAULT_WALLPAPER_PATH);
-		expect(BUILT_IN_WALLPAPERS.at(1)?.publicPath).toBe("/wallpapers/tahoe-dark.jpg");
-		expect(BUILT_IN_WALLPAPERS).toHaveLength(25);
+		expect(BUILT_IN_WALLPAPERS.at(1)?.publicPath).toBe("/wallpapers/ssok-ocean.jpg");
+		expect(BUILT_IN_WALLPAPERS).toHaveLength(12);
+		// Only original SsokRecorder artwork is bundled.
+		for (const wallpaper of BUILT_IN_WALLPAPERS) {
+			expect(wallpaper.relativePath).toMatch(/^wallpapers\/ssok-[a-z]+\.jpg$/);
+		}
 	});
 
 	it("preserves the curated order when asset discovery returns extra files", async () => {
@@ -30,25 +34,24 @@ describe("wallpapers", () => {
 				listAssetDirectory: vi.fn(async () => ({
 					success: true,
 					files: [
-						"wallpaper1.jpg",
-						"energy-17.jpg",
-						"midnight-8.jpg",
-						"wallpaper4.jpg",
-						"wispysky.mp4",
-						"cityscape.jpg",
-						"ipad-17-light.jpg",
+						"unrelated.jpg",
+						"ssok-lavender.jpg",
+						"ssok-ocean.jpg",
+						"ssok-sunset.jpg",
+						"notes.txt",
+						"ssok-graphite.jpg",
+						"ssok-grape.jpg",
 					],
 				})),
 			},
 		});
 
 		await expect(getAvailableWallpapers()).resolves.toEqual([
-			BUILT_IN_WALLPAPERS[2],
+			BUILT_IN_WALLPAPERS[1],
+			BUILT_IN_WALLPAPERS[3],
 			BUILT_IN_WALLPAPERS[4],
-			BUILT_IN_WALLPAPERS[15],
-			BUILT_IN_WALLPAPERS[16],
-			BUILT_IN_WALLPAPERS[23],
-			BUILT_IN_WALLPAPERS[24],
+			BUILT_IN_WALLPAPERS[7],
+			BUILT_IN_WALLPAPERS[11],
 		]);
 	});
 

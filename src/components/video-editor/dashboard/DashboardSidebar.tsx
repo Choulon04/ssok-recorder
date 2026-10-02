@@ -45,11 +45,15 @@ export function DashboardSidebar({
 			>
 				<div className="mb-4 flex h-10 items-center gap-2.5 px-3">
 					<img
-						src={`${import.meta.env.BASE_URL}app-icons/recordly-64.png`}
+						src={`${import.meta.env.BASE_URL}app-icons/ssok-64.png`}
 						alt=""
 						className="size-7 rounded-lg"
 					/>
-					<span className="text-[15px] font-semibold tracking-tight">쏙레코더</span>
+					<span className="flex flex-col leading-tight">
+						<span className="text-[15px] font-semibold tracking-tight">쏙레코더</span>
+						{/* Attribution required by Recordly's license (see AboutAttribution). */}
+						<span className="text-[10px] text-muted-foreground">Based on Recordly</span>
+					</span>
 				</div>
 				<RecordNewButton busy={busy} run={run} className="mb-5 w-full" />
 				<nav className="space-y-1">

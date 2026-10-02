@@ -22,5 +22,13 @@
 		"invalidFileType": "Tipo di file non valido",
 		"failedToUploadImage": "Caricamento immagine non riuscito",
 		"fileReadError": "Si è verificato un errore durante la lettura del file."
+	},
+	"about": {
+		"title": "About",
+		"basedOn": "SsokRecorder is a modified version of Recordly, an open-source screen recorder by webadderall. Recordly started as a fork of OpenScreen by Siddharth Vaddem.",
+		"license": "It is distributed under the GNU Affero General Public License v3.0, which gives you the right to receive its source code.",
+		"upstream": "Recordly on GitHub",
+		"licenseText": "AGPL-3.0 license text",
+		"notices": "Open-source notices"
 	}
 }

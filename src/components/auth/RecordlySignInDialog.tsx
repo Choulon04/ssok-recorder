@@ -183,7 +183,7 @@ export function RecordlySignInDialog({
 											aria-label="SsokRecorder"
 										>
 											<img
-												src={`${import.meta.env.BASE_URL}app-icons/recordly-128.png`}
+												src={`${import.meta.env.BASE_URL}app-icons/ssok-128.png`}
 												alt=""
 												className="size-12 rounded-xl"
 											/>

@@ -595,11 +595,11 @@ type WallpaperTile = {
 	previewUrl: string;
 };
 
+// "macos" and "windows11" remain valid saved values but render with the same original set,
+// so they are not offered separately.
 const BUILTIN_CURSOR_STYLE_OPTIONS: CursorStyleOption[] = [
-	{ value: "macos", label: "macOS" },
-	{ value: "tahoe", label: "Tahoe" },
-	{ value: "tahoe-inverted", label: "Tahoe Inverted" },
-	{ value: "windows11", label: "Windows 11" },
+	{ value: "tahoe", label: "Standard" },
+	{ value: "tahoe-inverted", label: "Standard Inverted" },
 	{ value: "dot", label: "Dot" },
 	{ value: "figma", label: "Minimal" },
 ];

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="618" height="1350" viewBox="0 0 618 1350" fill="none">
+<defs>
+<filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity="0.35"/></filter>
+<g id="c"><path d="M199 300 h76 a34 34 0 0 1 34 34 a34 34 0 0 1 34 -34 h76 v40 h-76 v508 h76 v40 h-76 a34 34 0 0 1 -34 -34 a34 34 0 0 1 -34 34 h-76 v-40 h76 v-508 h-76 z"/></g>
+</defs>
+<g filter="url(#s)">
+<use href="#c" fill="#111827" stroke="#111827" stroke-width="48" stroke-linejoin="round" stroke-linecap="round"/>
+<use href="#c" fill="#ffffff"/>
+</g>
+</svg>

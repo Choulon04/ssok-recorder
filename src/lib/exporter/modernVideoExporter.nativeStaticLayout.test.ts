@@ -371,12 +371,12 @@ describe("ModernVideoExporter native static-layout eligibility", () => {
 		electronAPI.getAssetBasePath = vi.fn(async () => "file:///C:/Recordly/resources/");
 		electronAPI.listAssetDirectory = vi.fn(async () => ({
 			success: true,
-			files: ["tahoe-light.jpg"],
+			files: ["ssok-aurora.jpg"],
 		}));
 
 		await expect(exporter.resolveNativeStaticLayoutBackground()).resolves.toEqual({
 			backgroundColor: "#101010",
-			backgroundImagePath: "C:/Recordly/resources/wallpapers/tahoe-light.jpg",
+			backgroundImagePath: "C:/Recordly/resources/wallpapers/ssok-aurora.jpg",
 		});
 	});
 

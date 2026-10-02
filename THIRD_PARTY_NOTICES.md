@@ -47,3 +47,23 @@ Source: https://github.com/480-Design/Solar-Icon-Set. Icons are rendered using t
 Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts).
 
 DM Sans is licensed under the SIL Open Font License, Version 1.1. The unmodified regular and italic variable fonts are sourced from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans). The full license is included in [src/assets/fonts/dm-sans/OFL.txt](src/assets/fonts/dm-sans/OFL.txt).
+
+## SsokRecorder additions
+
+SsokRecorder is a modified version of Recordly (AGPL-3.0, © 2026 webadderall), which
+started as a fork of OpenScreen by Siddharth Vaddem. See README.md for the list of changes.
+
+Bundled components with their own licenses:
+
+- **FFmpeg** via `ffmpeg-static` and `ffprobe-static` — GPL-3.0-or-later. Source for the
+  FFmpeg builds is available from the ffmpeg-static project and https://ffmpeg.org.
+- **whisper.cpp / ggml** — MIT. Speech models are downloaded on demand from the
+  whisper.cpp model repository (MIT).
+- **Electron** — MIT.
+- **Phosphor Icons** (`@phosphor-icons/react`) — MIT.
+
+Original SsokRecorder artwork (app icon in `branding/ssok`, cursor set in
+`src/assets/cursors/ssok`, wallpapers `public/wallpapers/ssok-*.jpg`) was created for this
+project and is distributed under the same AGPL-3.0 license as the code. Earlier Recordly
+releases shipped operating-system-vendor cursor and wallpaper artwork; those files are not
+included in SsokRecorder.

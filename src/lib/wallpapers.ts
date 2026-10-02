@@ -8,40 +8,29 @@ export interface BuiltInWallpaper {
 const IMAGE_FILE_PATTERN = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
 const VIDEO_FILE_PATTERN = /\.(avi|m4v|mkv|mov|mp4|webm)$/i;
 
+// Original SsokRecorder wallpapers (generated gradients). Projects that reference a
+// wallpaper no longer bundled fall back to the default via resolveAvailableWallpaperPath.
 export const BUILT_IN_WALLPAPERS: BuiltInWallpaper[] = [
-	createWallpaperEntry("tahoe-light.jpg", "Tahoe Light"),
-	createWallpaperEntry("tahoe-dark.jpg", "Tahoe Dark"),
-	createWallpaperEntry("midnight-8.jpg", "Midnight 8"),
-	createWallpaperEntry("ipad-17-dark.jpg", "iPad 17 Dark"),
-	createWallpaperEntry("ipad-17-light.jpg", "iPad 17 Light"),
-	createWallpaperEntry("sequoia-blue.jpg", "Sequoia Blue"),
-	createWallpaperEntry("sequoia-blue-orange.jpg", "Sequoia Blue Orange"),
-	createWallpaperEntry("ventura.jpg", "Ventura"),
-	createWallpaperEntry("sonoma-clouds.jpg", "Sonoma Clouds"),
-	createWallpaperEntry("sonoma-light.jpg", "Sonoma Light"),
-	createWallpaperEntry("sonoma-dark.jpg", "Sonoma Dark"),
-	createWallpaperEntry("glassmorphism-3.jpg", "Glassmorphism 3"),
-	createWallpaperEntry("glassmorphism-4.jpg", "Glassmorphism 4"),
-	createWallpaperEntry("energy-19.jpg", "Energy 19"),
-	createWallpaperEntry("wallpaper3.jpg", "Wallpaper 3"),
-	createWallpaperEntry("wallpaper4.jpg", "Wallpaper 4"),
-	createWallpaperEntry("cityscape.jpg", "Cityscape"),
-	createWallpaperEntry("levels.jpg", "Levels"),
-	createWallpaperEntry("wallpaper10.jpg", "Wallpaper 10"),
-	createWallpaperEntry("ventura-dark.jpg", "Ventura Dark"),
-	createWallpaperEntry("sonoma-evening.jpg", "Sonoma Evening"),
-	createWallpaperEntry("sonoma-horizon.jpg", "Sonoma Horizon"),
-	createWallpaperEntry("iridescent-9.jpg", "Iridescent 9"),
-	createWallpaperEntry("energy-17.jpg", "Energy 17"),
-	createWallpaperEntry("wispysky.mp4", "Wispy Sky"),
+	createWallpaperEntry("ssok-aurora.jpg", "Aurora"),
+	createWallpaperEntry("ssok-ocean.jpg", "Ocean"),
+	createWallpaperEntry("ssok-midnight.jpg", "Midnight"),
+	createWallpaperEntry("ssok-grape.jpg", "Grape"),
+	createWallpaperEntry("ssok-sunset.jpg", "Sunset"),
+	createWallpaperEntry("ssok-coral.jpg", "Coral"),
+	createWallpaperEntry("ssok-forest.jpg", "Forest"),
+	createWallpaperEntry("ssok-graphite.jpg", "Graphite"),
+	createWallpaperEntry("ssok-sky.jpg", "Sky"),
+	createWallpaperEntry("ssok-mint.jpg", "Mint"),
+	createWallpaperEntry("ssok-peach.jpg", "Peach"),
+	createWallpaperEntry("ssok-lavender.jpg", "Lavender"),
 ];
 
 export const WALLPAPER_PATHS = BUILT_IN_WALLPAPERS.map((wallpaper) => wallpaper.publicPath);
 export const WALLPAPER_RELATIVE_PATHS = BUILT_IN_WALLPAPERS.map(
 	(wallpaper) => wallpaper.relativePath,
 );
-export const DEFAULT_WALLPAPER_PATH = "/wallpapers/tahoe-light.jpg";
-export const DEFAULT_WALLPAPER_RELATIVE_PATH = "wallpapers/tahoe-light.jpg";
+export const DEFAULT_WALLPAPER_PATH = "/wallpapers/ssok-aurora.jpg";
+export const DEFAULT_WALLPAPER_RELATIVE_PATH = "wallpapers/ssok-aurora.jpg";
 
 function safeDecodeFileName(fileName: string) {
 	try {
