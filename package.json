@@ -3,13 +3,13 @@
 	"productName": "SsokRecorder",
 	"description": "쏙레코더 — 강의·튜토리얼 제작용 화면 녹화/편집기 (Recordly 기반, AGPL-3.0)",
 	"author": "SSOK",
-	"homepage": "https://github.com/webadderallorg/Recordly",
+	"homepage": "https://github.com/Choulon04/ssok-recorder",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/webadderallorg/Recordly.git"
+		"url": "https://github.com/Choulon04/ssok-recorder.git"
 	},
 	"bugs": {
-		"url": "https://github.com/webadderallorg/Recordly/issues"
+		"url": "https://github.com/Choulon04/ssok-recorder/issues"
 	},
 	"private": true,
 	"version": "0.1.0",
@@ -102,5 +102,6 @@
 		"vitest": "^3.2.7",
 		"web-demuxer": "^4.0.0"
 	},
-	"main": "dist-electron/main.cjs"
+	"main": "dist-electron/main.cjs",
+	"license": "AGPL-3.0"
 }

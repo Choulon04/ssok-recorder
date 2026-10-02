@@ -29,6 +29,7 @@
 		"license": "It is distributed under the GNU Affero General Public License v3.0, which gives you the right to receive its source code.",
 		"upstream": "Recordly on GitHub",
 		"licenseText": "AGPL-3.0 license text",
-		"notices": "Open-source notices"
+		"notices": "Open-source notices",
+		"source": "SsokRecorder source code"
 	}
 }

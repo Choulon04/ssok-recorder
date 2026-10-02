@@ -47,13 +47,21 @@
     {
       "from": "public/wallpapers",
       "to": "assets/wallpapers"
+    },
+    {
+      "from": "LICENSE.md",
+      "to": "licenses/LICENSE.md"
+    },
+    {
+      "from": "THIRD_PARTY_NOTICES.md",
+      "to": "licenses/THIRD_PARTY_NOTICES.md"
     }
   ],
   "publish": [
     {
       "provider": "github",
-      "owner": "webadderall",
-      "repo": "Recordly",
+      "owner": "Choulon04",
+      "repo": "ssok-recorder",
       "tagNamePrefix": "v",
       "publishAutoUpdate": true
     }
@@ -125,6 +133,7 @@
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
+    "license": "build/LICENSE.txt",
     "shortcutName": "쏙레코더"
   }
 }

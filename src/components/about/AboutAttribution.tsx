@@ -5,6 +5,8 @@ import { useScopedT } from "@/contexts/I18nContext";
 // SsokRecorder is a modified version of Recordly (AGPL-3.0). Recordly's license requires
 // attributing it in the user-facing UI as well as the repository; keep this screen.
 export const UPSTREAM_REPOSITORY_URL = "https://github.com/webadderallorg/Recordly";
+/** Where recipients get SsokRecorder's complete corresponding source (AGPL-3.0 §6). */
+export const SOURCE_REPOSITORY_URL = "https://github.com/Choulon04/ssok-recorder";
 export const AGPL_LICENSE_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
 
 const THIRD_PARTY = [
@@ -52,6 +54,9 @@ export function AboutAttribution() {
 				)}
 			</p>
 			<div className="flex flex-wrap gap-2">
+				<Button variant="secondary" size="sm" onClick={() => open(SOURCE_REPOSITORY_URL)}>
+					{t("about.source", "SsokRecorder source code")}
+				</Button>
 				<Button variant="secondary" size="sm" onClick={() => open(UPSTREAM_REPOSITORY_URL)}>
 					{t("about.upstream", "Recordly on GitHub")}
 				</Button>

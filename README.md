@@ -21,7 +21,7 @@ SsokRecorder is a modified version of [Recordly](https://github.com/webadderallo
 
 이 프로그램은 원본과 같은 **GNU Affero General Public License v3.0**으로 배포됩니다. 전문과 원본의 추가 조건은 [LICENSE.md](LICENSE.md), 제3자 구성요소는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)를 보세요. 앱 안에서는 대시보드 → 설정 → **정보**에서 원본 출처와 라이선스를 확인할 수 있습니다.
 
-Distributed under the GNU AGPL v3.0, the same license as Recordly. Anyone who receives the app has the right to its complete corresponding source code.
+Distributed under the GNU AGPL v3.0, the same license as Recordly. Anyone who receives the app has the right to its complete corresponding source code, published at https://github.com/Choulon04/ssok-recorder.
 
 ## Changes from Recordly / 수정 내역
 
