@@ -96,6 +96,40 @@ describe("exportCaptionSidecars", () => {
 		}
 	});
 
+	it("writes a YouTube chapter file even when there are no caption cues", async () => {
+		const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "recordly-sidecar-test-"));
+		const videoPath = path.join(tempDir, "강의.mp4");
+		const payload = parseCaptionSidecarPayload({
+			format: "both",
+			cues: [],
+			chaptersText: "0:00 인트로\n0:15 1단계",
+		});
+
+		try {
+			expect(payload).toEqual({
+				format: "both",
+				cues: [],
+				chaptersText: "0:00 인트로\n0:15 1단계",
+			});
+			await expect(writeCaptionSidecarsBestEffort(videoPath, payload)).resolves.toEqual({
+				wroteAny: true,
+				error: null,
+			});
+			await expect(
+				fs.readFile(path.join(tempDir, "강의.chapters.txt"), "utf8"),
+			).resolves.toBe("0:00 인트로\n0:15 1단계\n");
+			await expect(fs.access(path.join(tempDir, "강의.srt"))).rejects.toThrow();
+		} finally {
+			await fs.rm(tempDir, { recursive: true, force: true });
+		}
+	});
+
+	it("rejects payloads with neither captions nor chapters", () => {
+		expect(parseCaptionSidecarPayload({ format: "both", cues: [], chaptersText: "  " })).toBe(
+			null,
+		);
+	});
+
 	it("appends a non-fatal caption warning only when sidecar writes fail", () => {
 		expect(
 			withCaptionSidecarMessage("Video exported successfully", {

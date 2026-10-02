@@ -20,6 +20,20 @@ import {
 	useExportSuccessToast,
 } from "./exportRunnerSupport";
 
+/**
+ * Captions are opt-in per export; the YouTube chapter list rides along with every MP4.
+ */
+function resolveSidecarForExport(
+	payload: PendingExportSave["captionSidecar"] | undefined,
+	settings: ExportSettings,
+): PendingExportSave["captionSidecar"] | undefined {
+	if (!payload || settings.format !== "mp4") return undefined;
+	if (settings.includeCaptionSidecar) return payload;
+	return payload.chaptersText
+		? { format: payload.format, cues: [], chaptersText: payload.chaptersText }
+		: undefined;
+}
+
 export function useExportRunner(input: ExportRunnerInput) {
 	const inputRef = useRef(input);
 	inputRef.current = input;
@@ -358,10 +372,10 @@ export function useExportRunner(input: ExportRunnerInput) {
 							}
 							throw new Error("Could not prepare the video for sharing.");
 						}
-						const sidecarForThisExport =
-							settings.includeCaptionSidecar && captionSidecarPayload
-								? captionSidecarPayload
-								: undefined;
+						const sidecarForThisExport = resolveSidecarForExport(
+							captionSidecarPayload,
+							settings,
+						);
 						markExportAsSaving();
 
 						let saveResult: {

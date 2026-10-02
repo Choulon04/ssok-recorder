@@ -575,6 +575,7 @@ interface Window {
 					endMs: number;
 					text: string;
 				}>;
+				chaptersText?: string;
 			};
 		}) => Promise<{
 			success: boolean;
@@ -654,6 +655,7 @@ interface Window {
 					endMs: number;
 					text: string;
 				}>;
+				chaptersText?: string;
 			},
 		) => Promise<{ success: boolean; path?: string; message?: string; canceled?: boolean }>;
 		writeExportedVideoToPath: (
@@ -666,6 +668,7 @@ interface Window {
 					endMs: number;
 					text: string;
 				}>;
+				chaptersText?: string;
 			},
 		) => Promise<{
 			success: boolean;

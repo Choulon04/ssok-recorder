@@ -227,5 +227,9 @@
 		"partiallyPlaced": "Added {{placed}} of {{total}} lines; the rest ran past the end of the video.",
 		"lineFailed": "Narration line {{n}} failed",
 		"saveFailed": "Could not save settings"
+	},
+	"youtube": {
+		"export": "Export for YouTube",
+		"hint": "MP4 · original resolution · quality encoding · 30fps, plus captions (.srt) and chapters (.chapters.txt) when present."
 	}
 }

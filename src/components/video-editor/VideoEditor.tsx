@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import { useShortcuts } from "@/contexts/ShortcutsContext";
 import { getAspectRatioValue } from "@/utils/aspectRatioUtils";
+import { buildYouTubeChapterList, getChapters } from "./chapterMarkers";
 import { loadEditorPreferences } from "./editorPreferences";
 import { useEditorExportController } from "./export/useEditorExportController";
 import { useExportDimensions } from "./export/useExportDimensions";
@@ -19,6 +20,7 @@ import { useAppearanceState } from "./state/useAppearanceState";
 import { useEditorUiState } from "./state/useEditorUiState";
 import { useProjectState } from "./state/useProjectState";
 import { useTimelineState } from "./state/useTimelineState";
+import { getTimelineDurationMs } from "./types";
 import { useNvidiaCudaExportOptIn } from "./useNvidiaCudaExportOptIn";
 
 export default function VideoEditor() {
@@ -140,11 +142,21 @@ export default function VideoEditor() {
 		onEnabled: enableModernExportPipeline,
 	});
 	const hasCaptionsForSidecar = autoCaptionSettings.enabled && autoCaptions.length > 0;
+	const youtubeChaptersText = useMemo(() => {
+		const chapters = getChapters(timeline.annotationRegions);
+		if (chapters.length === 0) return undefined;
+		const totalMs = getTimelineDurationMs(timeline.clipRegions, duration * 1000);
+		return buildYouTubeChapterList(chapters, totalMs, t("timeline.chapter.intro", "Intro"))
+			.text;
+	}, [timeline.annotationRegions, timeline.clipRegions, duration, t]);
+	const includeCaptionCues =
+		hasCaptionsForSidecar && captionSidecarCues.length > 0 && includeCaptionSidecar;
 	const captionSidecarPayload =
-		hasCaptionsForSidecar && captionSidecarCues.length > 0 && includeCaptionSidecar
+		includeCaptionCues || youtubeChaptersText
 			? {
 					format: "both" as const,
-					cues: captionSidecarCues,
+					cues: includeCaptionCues ? captionSidecarCues : [],
+					...(youtubeChaptersText ? { chaptersText: youtubeChaptersText } : {}),
 				}
 			: undefined;
 	const { shortcuts, isMac } = useShortcuts();

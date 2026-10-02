@@ -10,7 +10,11 @@ export type CaptionSidecarCue = {
 export type CaptionSidecarPayload = {
 	format: "srt" | "vtt" | "both";
 	cues: CaptionSidecarCue[];
+	/** YouTube chapter list, written as `<video>.chapters.txt`. */
+	chaptersText?: string;
 };
+
+const MAX_CHAPTERS_TEXT_LENGTH = 20_000;
 
 export type CaptionSidecarWriteResult = {
 	wroteAny: boolean;
@@ -69,6 +73,7 @@ export function parseCaptionSidecarPayload(payload: unknown): CaptionSidecarPayl
 	const candidate = payload as {
 		format?: unknown;
 		cues?: unknown;
+		chaptersText?: unknown;
 	};
 
 	const format =
@@ -80,11 +85,15 @@ export function parseCaptionSidecarPayload(payload: unknown): CaptionSidecarPayl
 	}
 
 	const cues = normalizeCaptionSidecarCues(candidate.cues);
-	if (cues.length === 0) {
+	const chaptersText =
+		typeof candidate.chaptersText === "string" && candidate.chaptersText.trim()
+			? candidate.chaptersText.trim().slice(0, MAX_CHAPTERS_TEXT_LENGTH)
+			: undefined;
+	if (cues.length === 0 && !chaptersText) {
 		return null;
 	}
 
-	return { format, cues };
+	return chaptersText ? { format, cues, chaptersText } : { format, cues };
 }
 
 export function serializeSrt(cues: CaptionSidecarCue[]): string {
@@ -115,12 +124,21 @@ export async function writeCaptionSidecars(
 	const parsed = path.parse(videoPath);
 	const basePath = path.join(parsed.dir, parsed.name);
 
-	if (payload.format === "srt" || payload.format === "both") {
+	if (payload.cues.length > 0 && (payload.format === "srt" || payload.format === "both")) {
 		await fs.writeFile(`${basePath}.srt`, serializeSrt(payload.cues), "utf8");
 	}
 
-	if (payload.format === "vtt" || payload.format === "both") {
+	if (payload.cues.length > 0 && (payload.format === "vtt" || payload.format === "both")) {
 		await fs.writeFile(`${basePath}.vtt`, serializeVtt(payload.cues), "utf8");
+	}
+
+	if (payload.chaptersText) {
+		await fs.writeFile(
+			`${basePath}.chapters.txt`,
+			`${payload.chaptersText}
+`,
+			"utf8",
+		);
 	}
 }
 

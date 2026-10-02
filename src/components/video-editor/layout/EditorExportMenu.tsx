@@ -83,6 +83,22 @@ export function EditorExportMenu(props: Props) {
 		includeCaptionSidecar,
 		setIncludeCaptionSidecar,
 	} = exportSettings;
+	// The YouTube preset updates settings first, then starts the export on the next render so
+	// the start handler sees the new values.
+	const [youtubeExportPending, setYoutubeExportPending] = useState(false);
+	useEffect(() => {
+		if (!youtubeExportPending) return;
+		setYoutubeExportPending(false);
+		props.handleStartExportFromDropdown();
+	}, [youtubeExportPending, props.handleStartExportFromDropdown]);
+	const startYouTubeExport = () => {
+		setExportFormat("mp4");
+		setExportQuality("source");
+		setExportEncodingMode("quality");
+		setMp4FrameRate(30);
+		if (hasCaptionsForSidecar) setIncludeCaptionSidecar(true);
+		setYoutubeExportPending(true);
+	};
 	const {
 		isExporting,
 		exportProgress,
@@ -343,6 +359,21 @@ export function EditorExportMenu(props: Props) {
 								onExport={handleStartExportFromDropdown}
 								className="rounded-none bg-transparent p-5 shadow-none"
 							/>
+							<div className="px-5 pb-3">
+								<Button
+									variant="secondary"
+									className="w-full"
+									onClick={startYouTubeExport}
+								>
+									{t("editor.youtube.export", "Export for YouTube")}
+								</Button>
+								<p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">
+									{t(
+										"editor.youtube.hint",
+										"MP4 · original resolution · quality encoding · 30fps, plus captions (.srt) and chapters (.chapters.txt) when present.",
+									)}
+								</p>
+							</div>
 							{props.chapterCount > 0 && (
 								<div className="px-5 pb-3">
 									<Button

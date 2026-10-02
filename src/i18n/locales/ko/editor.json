@@ -227,5 +227,9 @@
 		"partiallyPlaced": "{{total}}줄 중 {{placed}}줄만 추가했습니다. 나머지는 영상 끝을 넘어갑니다.",
 		"lineFailed": "나레이션 {{n}}번째 줄 생성 실패",
 		"saveFailed": "설정을 저장하지 못했습니다"
+	},
+	"youtube": {
+		"export": "유튜브용 내보내기",
+		"hint": "MP4 · 원본 해상도 · 고품질 인코딩 · 30fps. 자막(.srt)과 챕터(.chapters.txt)가 있으면 영상 옆에 함께 저장합니다."
 	}
 }

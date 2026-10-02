@@ -9,6 +9,7 @@ export interface PendingExportSave {
 			endMs: number;
 			text: string;
 		}>;
+		chaptersText?: string;
 	};
 }
 
