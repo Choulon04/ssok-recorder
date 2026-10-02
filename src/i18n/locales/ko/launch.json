@@ -92,5 +92,16 @@
 		"updateNow": "지금 업데이트",
 		"restartToUpdate": "다시 시작하여 업데이트",
 		"tryAgain": "다시 시도"
+	},
+	"livePen": {
+		"toggle": "라이브 펜",
+		"toggleTip": "화면에 그리기 ({{shortcut}}) · Esc로 종료",
+		"pen": "펜 (P)",
+		"highlighter": "형광펜 (H)",
+		"arrow": "화살표 (A)",
+		"rect": "사각형 (R)",
+		"color": "색상 {{n}}",
+		"undo": "되돌리기 (Ctrl+Z)",
+		"clear": "모두 지우기 (C)"
 	}
 }

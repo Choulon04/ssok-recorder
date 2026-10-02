@@ -92,5 +92,16 @@
 		"updateNow": "Обновить сейчас",
 		"restartToUpdate": "Перезапустить для обновления",
 		"tryAgain": "Повторить"
+	},
+	"livePen": {
+		"toggle": "Live pen",
+		"toggleTip": "Draw on screen ({{shortcut}}) · Esc to finish",
+		"pen": "Pen (P)",
+		"highlighter": "Highlighter (H)",
+		"arrow": "Arrow (A)",
+		"rect": "Box (R)",
+		"color": "Color {{n}}",
+		"undo": "Undo (Ctrl+Z)",
+		"clear": "Clear (C)"
 	}
 }

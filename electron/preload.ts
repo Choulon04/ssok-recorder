@@ -758,6 +758,35 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.on("whisper-small-model-download-progress", listener);
 		return () => ipcRenderer.removeListener("whisper-small-model-download-progress", listener);
 	},
+	getLivePenState: () => {
+		return ipcRenderer.invoke("live-pen:get-state");
+	},
+	setLivePenActive: (active: boolean) => {
+		return ipcRenderer.invoke("live-pen:set-active", active);
+	},
+	updateLivePenSettings: (update: { tool?: string; color?: string; width?: number }) => {
+		return ipcRenderer.invoke("live-pen:update-settings", update);
+	},
+	sendLivePenCommand: (command: "undo" | "clear") => {
+		return ipcRenderer.invoke("live-pen:command", command);
+	},
+	onLivePenState: (callback: (state: unknown) => void) => {
+		const listener = (_event: Electron.IpcRendererEvent, state: unknown) => callback(state);
+		ipcRenderer.on("live-pen-state", listener);
+		return () => ipcRenderer.removeListener("live-pen-state", listener);
+	},
+	onLivePenSettings: (callback: (settings: unknown) => void) => {
+		const listener = (_event: Electron.IpcRendererEvent, settings: unknown) =>
+			callback(settings);
+		ipcRenderer.on("live-pen-settings", listener);
+		return () => ipcRenderer.removeListener("live-pen-settings", listener);
+	},
+	onLivePenCommand: (callback: (command: "undo" | "clear") => void) => {
+		const listener = (_event: Electron.IpcRendererEvent, command: "undo" | "clear") =>
+			callback(command);
+		ipcRenderer.on("live-pen-command", listener);
+		return () => ipcRenderer.removeListener("live-pen-command", listener);
+	},
 	getNarrationSettings: () => {
 		return ipcRenderer.invoke("narration:get-settings");
 	},

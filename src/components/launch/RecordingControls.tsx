@@ -10,6 +10,7 @@ import {
 import { useScopedT } from "@/contexts/I18nContext";
 import { Button, Separator, Tooltip } from "@heroui/react";
 import styles from "./LaunchWindow.module.css";
+import { LivePenControls } from "./LivePenControls";
 
 interface RecordingControlsProps {
 	onHome: () => void;
@@ -77,6 +78,8 @@ export function RecordingControls({
 				</Button>
 				<Tooltip.Content>{t("recording.micToggleDisabledTip")}</Tooltip.Content>
 			</Tooltip>
+			<Separator orientation="vertical" className="mx-1 h-5 self-center" />
+			<LivePenControls />
 			<Separator orientation="vertical" className="mx-1 h-5 self-center" />
 			<Tooltip>
 				<Button

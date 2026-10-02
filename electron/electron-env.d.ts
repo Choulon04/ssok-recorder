@@ -67,6 +67,8 @@ interface UpdateStatusSummary {
 
 type RendererRecordingSessionData = import("./ipc/types").RecordingSessionData;
 type NarrationSettingsView = import("./ipc/narration/fishTts").NarrationSettingsView;
+type LivePenState = import("./livePen").LivePenState;
+type LivePenSettings = import("./livePen").LivePenSettings;
 
 interface RendererFfmpegAudioMuxMetrics {
 	tempVideoWriteMs?: number;
@@ -727,6 +729,13 @@ interface Window {
 				error?: string;
 			}) => void,
 		) => () => void;
+		getLivePenState?: () => Promise<LivePenState>;
+		setLivePenActive?: (active: boolean) => Promise<LivePenState>;
+		updateLivePenSettings?: (update: Partial<LivePenSettings>) => Promise<LivePenState>;
+		sendLivePenCommand?: (command: "undo" | "clear") => Promise<void>;
+		onLivePenState?: (callback: (state: LivePenState) => void) => () => void;
+		onLivePenSettings?: (callback: (settings: LivePenSettings) => void) => () => void;
+		onLivePenCommand?: (callback: (command: "undo" | "clear") => void) => () => void;
 		getNarrationSettings: () => Promise<{
 			success: boolean;
 			settings?: NarrationSettingsView;

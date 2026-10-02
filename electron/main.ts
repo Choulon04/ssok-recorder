@@ -28,6 +28,7 @@ import {
 	registerIpcHandlers,
 } from "./ipc/handlers";
 import { ensureMediaServer } from "./mediaServer";
+import { registerLivePenHandlers, setLivePenRecordingActive } from "./livePen";
 import { hardenWebContentsNavigation, shouldHardenWebContentsType } from "./navigationPolicy";
 import { shouldGrantDisplayCapture, shouldGrantMediaPermission } from "./permissionPolicy";
 import { ensurePackagedRendererServer, getPackagedRendererBaseUrl } from "./rendererServer";
@@ -1019,6 +1020,7 @@ app.whenReady().then(async () => {
 		}),
 	]);
 
+	registerLivePenHandlers();
 	registerIpcHandlers(
 		createEditorWindowWrapper,
 		createSourceSelectorWindowWrapper,
@@ -1027,6 +1029,7 @@ app.whenReady().then(async () => {
 		(recording: boolean, sourceName: string) => {
 			selectedSourceName = sourceName;
 			setHudOverlayRecordingActive(recording);
+			setLivePenRecordingActive(recording);
 			if (shouldUseTray()) {
 				if (!tray) createTray();
 				updateTrayMenu(recording);
