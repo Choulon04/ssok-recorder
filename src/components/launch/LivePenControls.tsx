@@ -149,9 +149,13 @@ export function LivePenControls({ variant = "hud" }: { variant?: "hud" | "overla
 					<PencilSimple weight="fill" className="size-4" />
 				</Button>
 				<Tooltip.Content>
-					{t("livePen.toggleTip", "Draw on screen ({{shortcut}}) · Esc to finish", {
-						shortcut: state.shortcut.replace("CommandOrControl", "Ctrl"),
-					})}
+					{t(
+						"livePen.toggleTip",
+						"Draw on screen ({{shortcut}}) · Jump to a tool: Ctrl+Alt+P pen / H highlighter / A arrow / R box · Esc to finish",
+						{
+							shortcut: state.shortcut.replace("CommandOrControl", "Ctrl"),
+						},
+					)}
 				</Tooltip.Content>
 			</Tooltip>
 			<Tooltip>

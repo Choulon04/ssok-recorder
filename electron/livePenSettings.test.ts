@@ -1,5 +1,33 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_LIVE_PEN_SETTINGS, mergeLivePenSettings } from "./livePenSettings";
+import {
+	DEFAULT_LIVE_PEN_SETTINGS,
+	LIVE_PEN_TOOL_SHORTCUTS,
+	mergeLivePenSettings,
+	resolveToolShortcut,
+} from "./livePenSettings";
+
+describe("live pen tool shortcuts", () => {
+	it("opens, switches tools, and closes on the same key", () => {
+		expect(resolveToolShortcut(false, "pen", "highlighter")).toEqual({
+			active: true,
+			tool: "highlighter",
+		});
+		expect(resolveToolShortcut(true, "pen", "arrow")).toEqual({ active: true, tool: "arrow" });
+		expect(resolveToolShortcut(true, "rect", "rect")).toEqual({ active: false, tool: "rect" });
+	});
+
+	it("uses modifier combos only, one per tool", () => {
+		expect(LIVE_PEN_TOOL_SHORTCUTS.map((entry) => entry.tool)).toEqual([
+			"pen",
+			"highlighter",
+			"arrow",
+			"rect",
+		]);
+		for (const { accelerator } of LIVE_PEN_TOOL_SHORTCUTS) {
+			expect(accelerator).toMatch(/^CommandOrControl\+Alt\+[A-Z]$/);
+		}
+	});
+});
 
 describe("mergeLivePenSettings", () => {
 	it("applies valid fields and keeps the rest", () => {

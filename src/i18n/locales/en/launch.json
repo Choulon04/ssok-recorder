@@ -95,7 +95,7 @@
 	},
 	"livePen": {
 		"toggle": "Live pen",
-		"toggleTip": "Draw on screen ({{shortcut}}) · Esc to finish",
+		"toggleTip": "Draw on screen ({{shortcut}}) · Jump to a tool: Ctrl+Alt+P pen / H highlighter / A arrow / R box · Esc to finish",
 		"pen": "Pen (P)",
 		"highlighter": "Highlighter (H)",
 		"arrow": "Arrow (A)",

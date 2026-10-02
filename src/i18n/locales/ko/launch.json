@@ -95,7 +95,7 @@
 	},
 	"livePen": {
 		"toggle": "라이브 펜",
-		"toggleTip": "화면에 그리기 ({{shortcut}}) · Esc로 종료",
+		"toggleTip": "화면에 그리기 ({{shortcut}}) · 바로 도구로: Ctrl+Alt+P 펜 / H 형광펜 / A 화살표 / R 사각형 · Esc로 종료",
 		"pen": "펜 (P)",
 		"highlighter": "형광펜 (H)",
 		"arrow": "화살표 (A)",

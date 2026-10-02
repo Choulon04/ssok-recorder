@@ -6,8 +6,10 @@ import { USER_DATA_PATH } from "./appPaths";
 import { selectedSource } from "./ipc/state";
 import {
 	DEFAULT_LIVE_PEN_SETTINGS,
+	LIVE_PEN_TOOL_SHORTCUTS,
 	type LivePenSettings,
 	mergeLivePenSettings,
+	resolveToolShortcut,
 } from "./livePenSettings";
 import { getHudOverlayWindow, reassertHudOverlayMousePassthrough } from "./windows";
 
@@ -146,17 +148,32 @@ function updateSettings(update: unknown) {
 	return getState();
 }
 
-/** The global hotkey only exists while recording so it never steals the combo otherwise. */
+function registerShortcut(accelerator: string, handler: () => void) {
+	if (globalShortcut.isRegistered(accelerator)) return;
+	if (!globalShortcut.register(accelerator, handler)) {
+		console.warn(`[live-pen] Could not register ${accelerator}; another app may own it.`);
+	}
+}
+
+/** Global hotkeys only exist while recording so they never steal the combos otherwise. */
 export function setLivePenRecordingActive(recording: boolean) {
 	recordingActive = recording;
 	if (recording) {
-		if (!globalShortcut.isRegistered(LIVE_PEN_SHORTCUT)) {
-			globalShortcut.register(LIVE_PEN_SHORTCUT, () => {
-				if (recordingActive) setLivePenActive(!livePenWindow);
+		registerShortcut(LIVE_PEN_SHORTCUT, () => {
+			if (recordingActive) setLivePenActive(!livePenWindow);
+		});
+		for (const { accelerator, tool } of LIVE_PEN_TOOL_SHORTCUTS) {
+			registerShortcut(accelerator, () => {
+				if (!recordingActive) return;
+				const next = resolveToolShortcut(Boolean(livePenWindow), settings.tool, tool);
+				if (next.tool !== settings.tool) updateSettings({ tool: next.tool });
+				setLivePenActive(next.active);
 			});
 		}
 	} else {
 		globalShortcut.unregister(LIVE_PEN_SHORTCUT);
+		for (const { accelerator } of LIVE_PEN_TOOL_SHORTCUTS)
+			globalShortcut.unregister(accelerator);
 		setLivePenActive(false);
 	}
 }

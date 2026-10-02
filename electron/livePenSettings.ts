@@ -17,6 +17,27 @@ export const DEFAULT_LIVE_PEN_SETTINGS: LivePenSettings = {
 
 const TOOLS: readonly LivePenTool[] = ["pen", "highlighter", "arrow", "rect"];
 
+/**
+ * Recording-time global hotkeys that open the pen straight into a tool. Modifier combos on
+ * purpose: bare letters would swallow typing in the app being recorded.
+ */
+export const LIVE_PEN_TOOL_SHORTCUTS: ReadonlyArray<{ accelerator: string; tool: LivePenTool }> = [
+	{ accelerator: "CommandOrControl+Alt+P", tool: "pen" },
+	{ accelerator: "CommandOrControl+Alt+H", tool: "highlighter" },
+	{ accelerator: "CommandOrControl+Alt+A", tool: "arrow" },
+	{ accelerator: "CommandOrControl+Alt+R", tool: "rect" },
+];
+
+/** Pressing a tool hotkey: open the pen in that tool, switch tools, or close if it is the same. */
+export function resolveToolShortcut(
+	active: boolean,
+	currentTool: LivePenTool,
+	pressedTool: LivePenTool,
+): { active: boolean; tool: LivePenTool } {
+	if (active && currentTool === pressedTool) return { active: false, tool: currentTool };
+	return { active: true, tool: pressedTool };
+}
+
 /** Applies an untrusted (IPC or on-disk) update on top of the current settings. */
 export function mergeLivePenSettings(current: LivePenSettings, update: unknown): LivePenSettings {
 	const next = (update && typeof update === "object" ? update : {}) as Record<string, unknown>;
