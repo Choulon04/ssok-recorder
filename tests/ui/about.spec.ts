@@ -19,15 +19,20 @@ test("dashboard settings attribute Recordly and link the license", async ({ page
 	await page.getByRole("button", { name: "Settings", exact: true }).click();
 	const about = page.getByRole("region", { name: "About" });
 	await about.scrollIntoViewIfNeeded();
+	await expect(about).toContainText("Made by ssok.ai.");
 	await expect(about).toContainText("modified version of Recordly");
 	await expect(about).toContainText("SsokRecorder 0.1.0");
 	await about.getByRole("button", { name: "Open-source notices" }).click();
 	await expect(about).toContainText("FFmpeg (ffmpeg-static) — GPL-3.0");
+	await about.getByRole("button", { name: "ssok.ai", exact: true }).click();
+	await about.getByRole("button", { name: "SsokRecorder source code" }).click();
 	await about.getByRole("button", { name: "Recordly on GitHub" }).click();
 	await about.getByRole("button", { name: "AGPL-3.0 license text" }).click();
 	expect(
 		await page.evaluate(() => (window as unknown as { __opened: string[] }).__opened),
 	).toEqual([
+		"https://ssok.ai",
+		"https://github.com/Choulon04/ssok-recorder",
 		"https://github.com/webadderallorg/Recordly",
 		"https://www.gnu.org/licenses/agpl-3.0.html",
 	]);

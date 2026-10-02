@@ -30,6 +30,7 @@
 		"upstream": "Recordly GitHub",
 		"licenseText": "AGPL-3.0 라이선스 전문",
 		"notices": "오픈소스 고지",
-		"source": "쏙레코더 소스 코드"
+		"source": "쏙레코더 소스 코드",
+		"madeBy": "ssok.ai에서 만들었습니다."
 	}
 }

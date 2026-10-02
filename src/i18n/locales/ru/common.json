@@ -30,6 +30,7 @@
 		"upstream": "Recordly on GitHub",
 		"licenseText": "AGPL-3.0 license text",
 		"notices": "Open-source notices",
-		"source": "SsokRecorder source code"
+		"source": "SsokRecorder source code",
+		"madeBy": "Made by ssok.ai."
 	}
 }

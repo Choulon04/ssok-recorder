@@ -8,6 +8,8 @@
 
 A screen recorder and editor for lectures and tutorials: Korean auto-captions, step markers with YouTube chapters, TTS narration, and a live pen for drawing on screen while recording.
 
+Made by **[ssok.ai](https://ssok.ai)** · 만든 곳: [ssok.ai](https://ssok.ai)
+
 ## Based on Recordly / 원본 프로젝트
 
 **쏙레코더는 [Recordly](https://github.com/webadderallorg/Recordly)(© 2026 webadderall)를 수정해 만든 프로그램입니다.** Recordly는 Siddharth Vaddem의 OpenScreen 프로젝트에서 시작되었습니다.

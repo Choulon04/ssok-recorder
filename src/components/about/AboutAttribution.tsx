@@ -7,6 +7,7 @@ import { useScopedT } from "@/contexts/I18nContext";
 export const UPSTREAM_REPOSITORY_URL = "https://github.com/webadderallorg/Recordly";
 /** Where recipients get SsokRecorder's complete corresponding source (AGPL-3.0 §6). */
 export const SOURCE_REPOSITORY_URL = "https://github.com/Choulon04/ssok-recorder";
+export const PUBLISHER_URL = "https://ssok.ai";
 export const AGPL_LICENSE_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
 
 const THIRD_PARTY = [
@@ -42,6 +43,7 @@ export function AboutAttribution() {
 				{version ? ` ${version}` : ""}
 			</h2>
 			<p className="text-sm text-muted-foreground">
+				{t("about.madeBy", "Made by ssok.ai.")}{" "}
 				{t(
 					"about.basedOn",
 					"SsokRecorder is a modified version of Recordly, an open-source screen recorder by webadderall. Recordly started as a fork of OpenScreen by Siddharth Vaddem.",
@@ -54,6 +56,9 @@ export function AboutAttribution() {
 				)}
 			</p>
 			<div className="flex flex-wrap gap-2">
+				<Button variant="secondary" size="sm" onClick={() => open(PUBLISHER_URL)}>
+					ssok.ai
+				</Button>
 				<Button variant="secondary" size="sm" onClick={() => open(SOURCE_REPOSITORY_URL)}>
 					{t("about.source", "SsokRecorder source code")}
 				</Button>
