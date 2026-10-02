@@ -1,10 +1,10 @@
-import { useRawLibrary } from "./useRawLibrary";
 import { useMemo, useState } from "react";
 import { toast } from "@/components/ui/toast";
 import type { ProjectLibraryEntry } from "../ProjectBrowserDialog";
 import type { DashboardProps } from "./types";
 import { useDashboardMetadata } from "./useDashboardMetadata";
 import { useProjectFolders } from "./useProjectFolders";
+import { useRawLibrary } from "./useRawLibrary";
 export function useDashboardModel({
 	entries,
 	onOpenChange,

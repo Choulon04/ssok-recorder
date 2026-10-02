@@ -1,5 +1,5 @@
-import { DashboardAnnouncements } from "./DashboardAnnouncements";
 import { Card, Modal } from "@heroui/react";
+import { DashboardAnnouncements } from "./DashboardAnnouncements";
 import { DashboardDialogs } from "./DashboardDialogs";
 import { DashboardFilters } from "./DashboardFilters";
 import { DashboardGrid } from "./DashboardGrid";

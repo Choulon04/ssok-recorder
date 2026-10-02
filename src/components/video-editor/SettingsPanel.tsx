@@ -28,6 +28,7 @@ import {
 } from "@/lib/wallpapers";
 import { type AspectRatio } from "@/utils/aspectRatioUtils";
 import { useI18n, useScopedT } from "../../contexts/I18nContext";
+import { WHISPER_MODELS, type WhisperModelId } from "@/lib/whisperModels";
 import type { AppLocale } from "../../i18n/config";
 import { SUPPORTED_LOCALES } from "../../i18n/config";
 import { AnnotationSettingsPanel } from "./AnnotationSettingsPanel";
@@ -546,6 +547,9 @@ interface SettingsPanelProps {
 	onClearAutoCaptions?: () => void;
 	onDownloadWhisperSmallModel?: () => void;
 	onDeleteWhisperSmallModel?: () => void;
+	selectedWhisperModelId?: WhisperModelId;
+	downloadedWhisperModels?: Partial<Record<WhisperModelId, string>>;
+	onSelectWhisperModel?: (modelId: WhisperModelId) => void;
 	captionCurrentTimeMs?: number;
 	selectedCaptionId?: string | null;
 	onBeginCaptionEdit?: (id: string) => void;
@@ -601,6 +605,7 @@ const BUILTIN_CURSOR_STYLE_OPTIONS: CursorStyleOption[] = [
 ];
 
 const CAPTION_LANGUAGE_OPTIONS = [
+	{ value: "ko", label: "한국어 (Korean)" },
 	{ value: "auto", label: "Auto Detect" },
 	{ value: "en", label: "English" },
 	{ value: "es", label: "Spanish" },
@@ -610,7 +615,6 @@ const CAPTION_LANGUAGE_OPTIONS = [
 	{ value: "pt", label: "Portuguese" },
 	{ value: "zh", label: "Chinese (Simplified)" },
 	{ value: "ja", label: "Japanese" },
-	{ value: "ko", label: "Korean" },
 ] as const;
 
 const APP_LANGUAGE_LABELS: Record<AppLocale, string> = {
@@ -988,6 +992,9 @@ export function SettingsPanel({
 	onClearAutoCaptions,
 	onDownloadWhisperSmallModel,
 	onDeleteWhisperSmallModel,
+	selectedWhisperModelId,
+	downloadedWhisperModels = {},
+	onSelectWhisperModel,
 	captionCurrentTimeMs = 0,
 	selectedCaptionId = null,
 	onBeginCaptionEdit,
@@ -2039,6 +2046,31 @@ export function SettingsPanel({
 						</SelectContent>
 					</Select>
 				</div>
+				{selectedWhisperModelId && onSelectWhisperModel ? (
+					<div className="flex items-center justify-between gap-3">
+						<div className="text-sm font-medium text-foreground">
+							{tSettings("captions.model", "Model")}
+						</div>
+						<Select
+							value={selectedWhisperModelId}
+							onValueChange={(value) => onSelectWhisperModel(value as WhisperModelId)}
+						>
+							<SelectTrigger className="h-9 w-[180px] text-sm">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								{WHISPER_MODELS.map((model) => (
+									<SelectItem key={model.id} value={model.id}>
+										{locale === "ko" ? model.koLabel : model.label}
+										{downloadedWhisperModels[model.id]
+											? " ✓"
+											: ` (${model.sizeMb}MB)`}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				) : null}
 				<div className="flex items-center justify-between gap-3">
 					<div className="text-sm font-medium text-foreground">
 						{tSettings("captions.animation", "Animation")}
@@ -2070,7 +2102,11 @@ export function SettingsPanel({
 								{tSettings("captions.downloading", "Downloading...")}{" "}
 								{Math.round(whisperModelDownloadProgress)}%
 							</Button>
-						) : whisperModelPath ? (
+						) : (
+								selectedWhisperModelId
+									? downloadedWhisperModels[selectedWhisperModelId]
+									: whisperModelPath
+							) ? (
 							<Button
 								type="button"
 								variant="outline"

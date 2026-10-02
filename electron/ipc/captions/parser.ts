@@ -54,13 +54,15 @@ export function parseWhisperJsonWords(tokens: unknown): CaptionWordPayload[] {
 				previousWord.text += part;
 				continue;
 			}
-			if (tokenStartMs == null || tokenEndMs == null || tokenEndMs <= tokenStartMs) return [];
+			// whisper emits zero-length tokens for multi-byte fragments (Korean, CJK), so only
+			// missing or reversed offsets invalidate the segment's word timing.
+			if (tokenStartMs == null || tokenEndMs == null || tokenEndMs < tokenStartMs) return [];
 
 			if (!previousWord || nextLeadingSpace) {
 				words.push({
 					text: part,
 					startMs: tokenStartMs,
-					endMs: tokenEndMs,
+					endMs: Math.max(tokenEndMs, tokenStartMs + 1),
 					...(words.length > 0 && nextLeadingSpace ? { leadingSpace: true } : {}),
 				});
 			} else {

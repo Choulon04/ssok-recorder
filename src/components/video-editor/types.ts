@@ -471,7 +471,7 @@ function getDefaultAnnotationFontFamily() {
 }
 
 export function getDefaultCaptionFontFamily() {
-	return '"SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif';
+	return '"SF Pro Text", "SF Pro Display", "Helvetica Neue", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
 }
 
 export interface AnnotationRegion {
@@ -603,7 +603,7 @@ export interface AutoCaptionSettings {
 export const DEFAULT_AUTO_CAPTION_SETTINGS: AutoCaptionSettings = {
 	enabled: false,
 	timelineQuickAdd: true,
-	language: "auto",
+	language: "ko",
 	fontFamily: getDefaultCaptionFontFamily(),
 	fontSize: 30,
 	bottomOffset: 3,

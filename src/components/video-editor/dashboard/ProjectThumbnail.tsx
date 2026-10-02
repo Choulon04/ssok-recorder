@@ -1,8 +1,8 @@
-import type { ProjectPreviewData } from "@/types/projectPreview";
-import { ProjectHoverPreview } from "./ProjectHoverPreview";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ImageSquare } from "@/components/ui/icons";
-import { useState, useEffect, useCallback, useRef } from "react";
+import type { ProjectPreviewData } from "@/types/projectPreview";
 import { toFileUrl } from "../projectPersistence";
+import { ProjectHoverPreview } from "./ProjectHoverPreview";
 export function ProjectThumbnail({
 	path,
 	projectPath,

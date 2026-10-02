@@ -9,6 +9,14 @@ vi.mock("react", () => ({
 		state.refs[index] ??= { current };
 		return state.refs[index];
 	},
+	useState: (initial: unknown) => {
+		const index = state.index++;
+		state.refs[index] ??= {
+			current: typeof initial === "function" ? (initial as () => unknown)() : initial,
+		};
+		const slot = state.refs[index];
+		return [slot.current, (next: unknown) => (slot.current = next)];
+	},
 }));
 vi.mock("@/components/ui/toast", () => ({
 	toast: { error: vi.fn(), info: vi.fn(), success: vi.fn() },

@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
+import { describe, expect, it } from "vitest";
 import { DashboardAnnouncements } from "./DashboardAnnouncements";
 
 const banner = { src: "/banner.svg", alt: "Product news", href: "https://example.com/news" };

@@ -83,7 +83,7 @@
 		"connectedZoomDuration": "Dauer bei verbundenem Zoom",
 		"connectedZoomEasing": "Kurve für verbundenen Schwenk",
 		"zoomEasingOptions": {
-			"recordly": "Recordly",
+			"recordly": "SsokRecorder",
 			"glide": "Glide",
 			"smooth": "Smooth",
 			"snappy": "Snappy",
@@ -198,7 +198,9 @@
 			"split": "Teilen",
 			"merge": "Zusammenführen",
 			"delete": "Löschen"
-		}
+		},
+		"model": "Model",
+		"autoGenerating": "Generating captions for the new recording…"
 	},
 	"crop": {
 		"title": "Video zuschneiden",
@@ -254,7 +256,7 @@
 		"deleteRegion": "Audio löschen"
 	},
 	"updates": {
-		"experimentalDescription": "Sie haben experimentelle Updates aktiviert und können daher das neueste Update von Recordly testen, bevor es allgemein verfügbar ist.",
+		"experimentalDescription": "Sie haben experimentelle Updates aktiviert und können daher das neueste Update von SsokRecorder testen, bevor es allgemein verfügbar ist.",
 		"title": "Updates",
 		"experimental": "Experimentelle Updates",
 		"saveFailed": "Update-Kanal konnte nicht geändert werden."

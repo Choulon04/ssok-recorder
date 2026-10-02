@@ -696,21 +696,27 @@ interface Window {
 			canceled?: boolean;
 			error?: string;
 		}>;
-		getWhisperSmallModelStatus: () => Promise<{
+		getWhisperSmallModelStatus: (modelId?: string) => Promise<{
 			success: boolean;
+			modelId?: string;
 			exists: boolean;
 			path?: string | null;
+			/** Catalog model id -> path, for every model already on disk. */
+			downloaded?: Record<string, string>;
 			error?: string;
 		}>;
-		downloadWhisperSmallModel: () => Promise<{
+		downloadWhisperSmallModel: (modelId?: string) => Promise<{
 			success: boolean;
 			path?: string;
 			alreadyDownloaded?: boolean;
 			error?: string;
 		}>;
-		deleteWhisperSmallModel: () => Promise<{ success: boolean; error?: string }>;
+		deleteWhisperSmallModel: (
+			modelId?: string,
+		) => Promise<{ success: boolean; error?: string }>;
 		onWhisperSmallModelDownloadProgress: (
 			callback: (state: {
+				modelId?: string;
 				status: "idle" | "downloading" | "downloaded" | "error";
 				progress: number;
 				path?: string | null;

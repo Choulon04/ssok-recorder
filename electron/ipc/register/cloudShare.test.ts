@@ -30,10 +30,10 @@ describe("cloud share contract", () => {
 
 	it("rejects insecure and untrusted remote endpoints", () => {
 		expect(() => normalizeCloudEndpoint("http://share.example.com/api/shares")).toThrow(
-			"only allowed through the Recordly service",
+			"only allowed through the SsokRecorder service",
 		);
 		expect(() => normalizeCloudEndpoint("https://share.example.com/api/upload")).toThrow(
-			"only allowed through the Recordly service",
+			"only allowed through the SsokRecorder service",
 		);
 		expect(() => normalizeCloudEndpoint("https://videos.recordly.dev/api/other")).toThrow(
 			"endpoint is invalid",

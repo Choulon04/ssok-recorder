@@ -11,7 +11,11 @@ const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
 const INITIAL_UPDATE_CHECK_DELAY_MS = 15 * 1000;
 export const UPDATE_REMINDER_DELAY_MS = 3 * 60 * 60 * 1000;
 const DISMISSED_READY_REMINDER_DELAY_MS = 5 * 60 * 1000;
-const AUTO_UPDATES_DISABLED = process.env.RECORDLY_DISABLE_AUTO_UPDATES === "1";
+// SsokRecorder: upstream update feed points at the original Recordly releases, so updates stay off
+// unless a custom feed is provided via RECORDLY_UPDATE_FEED_URL.
+const AUTO_UPDATES_DISABLED =
+	process.env.RECORDLY_DISABLE_AUTO_UPDATES === "1" ||
+	!process.env.RECORDLY_UPDATE_FEED_URL?.trim();
 const UPDATE_FEED_URL_OVERRIDE = process.env.RECORDLY_UPDATE_FEED_URL?.trim() ?? "";
 const UPDATER_LOG_PATH =
 	process.env.RECORDLY_UPDATER_LOG_PATH?.trim() || path.join(USER_DATA_PATH, "updater.log");
@@ -141,7 +145,7 @@ function applyExperimentalUpdatesPreference() {
 	const { channel, allowPrerelease, allowDowngrade } = getUpdateChannelConfiguration(enabled);
 	autoUpdater.channel = channel;
 	autoUpdater.allowPrerelease = allowPrerelease;
-	// Changing channels enables downgrades inside electron-updater. Recordly never
+	// Changing channels enables downgrades inside electron-updater. SsokRecorder never
 	// needs that behaviour: opting out waits for the next stable version instead.
 	autoUpdater.allowDowngrade = allowDowngrade;
 	writeUpdaterLog(
@@ -261,10 +265,10 @@ function createDownloadingUpdateToastPayload(
 		phase: "downloading",
 		detail:
 			normalizedProgress >= 100
-				? "Finishing the update download. Recordly will restart as soon as the installer is ready."
+				? "Finishing the update download. SsokRecorder will restart as soon as the installer is ready."
 				: remainingMb !== null
-					? `${remainingMb.toFixed(1)} MB left before Recordly restarts.`
-					: "Downloading the update now. Recordly will restart when it finishes.",
+					? `${remainingMb.toFixed(1)} MB left before SsokRecorder restarts.`
+					: "Downloading the update now. SsokRecorder will restart when it finishes.",
 		delayMs: UPDATE_REMINDER_DELAY_MS,
 		isExperimental,
 		progressPercent: normalizedProgress,
@@ -471,7 +475,7 @@ export async function downloadAvailableUpdate(
 	setUpdateStatusSummary({
 		status: "downloading",
 		availableVersion,
-		detail: `Downloading Recordly ${availableVersion}`,
+		detail: `Downloading SsokRecorder ${availableVersion}`,
 	});
 	emitUpdateToastState(
 		sendToRenderer,
@@ -589,7 +593,7 @@ async function showAvailableUpdateDialog(
 	const result = await showMessageBox(getMainWindow, {
 		type: "info",
 		title: isExperimental ? "Experimental Update Available" : "Update Available",
-		message: `Recordly ${version} is available${isExperimental ? " on the experimental channel" : ""}.`,
+		message: `SsokRecorder ${version} is available${isExperimental ? " on the experimental channel" : ""}.`,
 		detail: isPreview
 			? `${isExperimental ? EXPERIMENTAL_UPDATE_DESCRIPTION : "This is a development preview of the standard update flow."} No real update will be installed.`
 			: isExperimental
@@ -633,8 +637,8 @@ async function showDownloadedUpdateDialog(
 		type: "info",
 		title: "Update Ready",
 		message: isPreview
-			? `Recordly ${version} is ready to install.`
-			: `Recordly ${version} has been downloaded.`,
+			? `SsokRecorder ${version} is ready to install.`
+			: `SsokRecorder ${version} has been downloaded.`,
 		detail: isPreview
 			? "Development preview of the native update prompt. No real update will be installed."
 			: "Install and restart now, or remind me later.",
@@ -686,7 +690,7 @@ async function showUpdateErrorDialog(
 	await showMessageBox(getMainWindow, {
 		type: "error",
 		title: "Update Failed",
-		message: `Recordly ${version} could not be downloaded.`,
+		message: `SsokRecorder ${version} could not be downloaded.`,
 		detail: String(error),
 		buttons: ["OK"],
 		defaultId: 0,
@@ -782,7 +786,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "available",
 			availableVersion: info.version,
-			detail: `Recordly ${info.version} is available.`,
+			detail: `SsokRecorder ${info.version} is available.`,
 		});
 		if (skippedVersion === info.version) {
 			manualCheckRequested = false;
@@ -810,7 +814,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "up-to-date",
 			availableVersion: null,
-			detail: `Recordly ${app.getVersion()} is up to date.`,
+			detail: `SsokRecorder ${app.getVersion()} is up to date.`,
 		});
 		clearVisibleUpdateToast(sendToRenderer);
 		manualCheckRequested = false;
@@ -825,7 +829,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "downloading",
 			availableVersion,
-			detail: `Downloading Recordly ${availableVersion}`,
+			detail: `Downloading SsokRecorder ${availableVersion}`,
 		});
 		writeUpdaterLog(
 			`Download progress for ${availableVersion}: ${progress.percent.toFixed(1)}%`,
@@ -884,7 +888,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "ready",
 			availableVersion: info.version,
-			detail: `Recordly ${info.version} is ready to install.`,
+			detail: `SsokRecorder ${info.version} is ready to install.`,
 		});
 		clearDeferredReminderTimer();
 

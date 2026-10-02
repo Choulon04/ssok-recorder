@@ -2,9 +2,9 @@ import path from "node:path";
 import { dialog, ipcMain } from "electron";
 import { generateAutoCaptionsFromVideo } from "../captions/generate";
 import {
-	deleteWhisperSmallModel,
-	downloadWhisperSmallModel,
-	getWhisperSmallModelStatus,
+	deleteWhisperModel,
+	downloadWhisperModel,
+	getWhisperModelStatus,
 	sendWhisperModelDownloadProgress,
 } from "../captions/whisper";
 import { LEGACY_PROJECT_FILE_EXTENSIONS, PROJECT_FILE_EXTENSION } from "../constants";
@@ -25,13 +25,15 @@ export function registerCaptionHandlers() {
 			const includeProjects = Boolean(options?.includeProjects);
 			const recordingsDir = await getRecordingsDir();
 			const result = await dialog.showOpenDialog({
-				title: includeProjects ? "Import Media or Recordly Project" : "Select Video File",
+				title: includeProjects
+					? "Import Media or SsokRecorder Project"
+					: "Select Video File",
 				defaultPath: recordingsDir,
 				filters: [
 					...(includeProjects
 						? [
 								{
-									name: "Media or Recordly Projects",
+									name: "Media or SsokRecorder Projects",
 									extensions: [
 										...VIDEO_FILE_EXTENSIONS,
 										...PROJECT_FILE_EXTENSIONS,
@@ -41,7 +43,7 @@ export function registerCaptionHandlers() {
 						: []),
 					{ name: "Video Files", extensions: VIDEO_FILE_EXTENSIONS },
 					...(includeProjects
-						? [{ name: "Recordly Projects", extensions: PROJECT_FILE_EXTENSIONS }]
+						? [{ name: "SsokRecorder Projects", extensions: PROJECT_FILE_EXTENSIONS }]
 						: []),
 					{ name: "All Files", extensions: ["*"] },
 				],
@@ -161,19 +163,20 @@ export function registerCaptionHandlers() {
 		}
 	});
 
-	ipcMain.handle("get-whisper-small-model-status", async () => {
+	ipcMain.handle("get-whisper-small-model-status", async (_, modelId?: string) => {
 		try {
-			return await getWhisperSmallModelStatus();
+			return await getWhisperModelStatus(modelId);
 		} catch (error) {
 			return { success: false, exists: false, path: null, error: String(error) };
 		}
 	});
 
-	ipcMain.handle("download-whisper-small-model", async (event) => {
+	ipcMain.handle("download-whisper-small-model", async (event, modelId?: string) => {
 		try {
-			const existing = await getWhisperSmallModelStatus();
+			const existing = await getWhisperModelStatus(modelId);
 			if (existing.exists) {
 				sendWhisperModelDownloadProgress(event.sender, {
+					modelId: existing.modelId,
 					status: "downloaded",
 					progress: 100,
 					path: existing.path,
@@ -181,30 +184,32 @@ export function registerCaptionHandlers() {
 				return { success: true, path: existing.path, alreadyDownloaded: true };
 			}
 
-			const modelPath = await downloadWhisperSmallModel(event.sender);
+			const modelPath = await downloadWhisperModel(event.sender, modelId);
 			return { success: true, path: modelPath };
 		} catch (error) {
-			console.error("Failed to download Whisper small model:", error);
+			console.error("Failed to download Whisper model:", error);
 			return { success: false, error: String(error) };
 		}
 	});
 
-	ipcMain.handle("delete-whisper-small-model", async (event) => {
+	ipcMain.handle("delete-whisper-small-model", async (event, modelId?: string) => {
+		const status = await getWhisperModelStatus(modelId);
 		try {
-			await deleteWhisperSmallModel();
+			await deleteWhisperModel(modelId);
 			sendWhisperModelDownloadProgress(event.sender, {
+				modelId: status.modelId,
 				status: "idle",
 				progress: 0,
 				path: null,
 			});
 			return { success: true };
 		} catch (error) {
-			console.error("Failed to delete Whisper small model:", error);
+			console.error("Failed to delete Whisper model:", error);
 			// Verify whether the file was actually removed despite the error
-			const status = await getWhisperSmallModelStatus();
-			if (!status.exists) {
+			if (!(await getWhisperModelStatus(modelId)).exists) {
 				// File is gone — treat as success
 				sendWhisperModelDownloadProgress(event.sender, {
+					modelId: status.modelId,
 					status: "idle",
 					progress: 0,
 					path: null,
@@ -212,6 +217,7 @@ export function registerCaptionHandlers() {
 				return { success: true };
 			}
 			sendWhisperModelDownloadProgress(event.sender, {
+				modelId: status.modelId,
 				status: "error",
 				progress: 0,
 				path: null,

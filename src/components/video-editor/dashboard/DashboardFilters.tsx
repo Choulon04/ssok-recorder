@@ -1,8 +1,7 @@
-import type { DashboardProps } from "./types";
 import { Dropdown } from "@heroui/react";
-import { CaretDown, Trash } from "@/components/ui/icons";
-
 import { Button } from "@/components/ui/button";
+import { CaretDown, Trash } from "@/components/ui/icons";
+import type { DashboardProps } from "./types";
 
 import type { DashboardModel } from "./useDashboardModel";
 

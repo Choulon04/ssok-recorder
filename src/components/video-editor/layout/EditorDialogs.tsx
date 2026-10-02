@@ -10,8 +10,8 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import type { ProjectLibraryEntry } from "../ProjectBrowserDialog";
 import { Dashboard } from "../dashboard/Dashboard";
+import type { ProjectLibraryEntry } from "../ProjectBrowserDialog";
 
 export type UnsavedChangesDecision = "cancel" | "discard" | "save";
 
@@ -41,8 +41,8 @@ interface EditorDialogsProps {
 	projectError: string | null;
 	onDashboardSignIn: () => void;
 	onDeleteProjects: (paths: string[]) => Promise<string[]>;
- onRenameProject: (path: string, name: string) => Promise<string>;
- onShareProject: (path: string) => Promise<void>;
+	onRenameProject: (path: string, name: string) => Promise<string>;
+	onShareProject: (path: string) => Promise<void>;
 	accountLabel?: string;
 	handleImportMediaOrProject: () => Promise<void>;
 	handleOpenProjectFromLibrary: (projectPath: string) => Promise<unknown>;
@@ -70,8 +70,8 @@ export function EditorDialogs({
 	projectError,
 	onDashboardSignIn,
 	onDeleteProjects,
- onRenameProject,
- onShareProject,
+	onRenameProject,
+	onShareProject,
 	accountLabel,
 	handleImportMediaOrProject,
 	handleOpenProjectFromLibrary,
@@ -96,7 +96,7 @@ export function EditorDialogs({
 							<DialogDescription className="text-muted-foreground">
 								{t(
 									"editor.project.saveDescription",
-									"Name this project. It will be saved in your Recordly Projects folder.",
+									"Name this project. It will be saved in your SsokRecorder Projects folder.",
 								)}
 							</DialogDescription>
 						</DialogHeader>
@@ -188,8 +188,8 @@ export function EditorDialogs({
 				error={projectError}
 				onSignIn={onDashboardSignIn}
 				onDeleteProjects={onDeleteProjects}
- onRenameProject={onRenameProject}
- onShareProject={onShareProject}
+				onRenameProject={onRenameProject}
+				onShareProject={onShareProject}
 				accountLabel={accountLabel}
 				onImportFile={handleImportMediaOrProject}
 				onOpenProject={handleOpenProjectFromLibrary}
@@ -210,7 +210,7 @@ export function EditorDialogs({
 						<DialogDescription className="text-muted-foreground">
 							{t(
 								"editor.nativeCaptureUnavailable.description",
-								"Your device does not support native capture. This could be for a variety of reasons we haven’t figured out yet. This doesn’t break Recordly, but it does make cursor smoothing impossible.",
+								"Your device does not support native capture. This could be for a variety of reasons we haven’t figured out yet. This doesn’t break SsokRecorder, but it does make cursor smoothing impossible.",
 							)}
 						</DialogDescription>
 					</DialogHeader>

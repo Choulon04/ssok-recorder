@@ -1,13 +1,14 @@
-import { ProjectFolderChips } from "./ProjectFolderChips";
-import { RawThumbnail } from "./RawRecordings";
-import { AccountAvatar } from "@/components/ui/account-avatar";
 import { Dropdown } from "@heroui/react";
-import { Check, DotsThree, FolderSimple, Plus } from "@/components/ui/icons";
 import { useRef, useState } from "react";
+import { AccountAvatar } from "@/components/ui/account-avatar";
 import { Button } from "@/components/ui/button";
+import { Check, DotsThree, FolderSimple, Plus } from "@/components/ui/icons";
+import { recordlyAuthConfigured } from "@/lib/auth/recordlyAuth";
 import { getProjectShareLink, moveProjectShareLink } from "../cloud/projectShareLinks";
 import type { ProjectLibraryEntry } from "../ProjectBrowserDialog";
+import { ProjectFolderChips } from "./ProjectFolderChips";
 import { ProjectThumbnail } from "./ProjectThumbnail";
+import { RawThumbnail } from "./RawRecordings";
 import type { DashboardProps } from "./types";
 import type { DashboardModel } from "./useDashboardModel";
 
@@ -224,7 +225,7 @@ export function ProjectCard({
 							>
 								Rename
 							</Dropdown.Item>
-							{!entry.rawSource && (
+							{recordlyAuthConfigured && !entry.rawSource && (
 								<Dropdown.Item
 									id="share"
 									onAction={() =>

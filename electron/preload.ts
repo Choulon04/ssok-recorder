@@ -727,17 +727,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	openWhisperModelPicker: () => {
 		return ipcRenderer.invoke("open-whisper-model-picker");
 	},
-	getWhisperSmallModelStatus: () => {
-		return ipcRenderer.invoke("get-whisper-small-model-status");
+	getWhisperSmallModelStatus: (modelId?: string) => {
+		return ipcRenderer.invoke("get-whisper-small-model-status", modelId);
 	},
-	downloadWhisperSmallModel: () => {
-		return ipcRenderer.invoke("download-whisper-small-model");
+	downloadWhisperSmallModel: (modelId?: string) => {
+		return ipcRenderer.invoke("download-whisper-small-model", modelId);
 	},
-	deleteWhisperSmallModel: () => {
-		return ipcRenderer.invoke("delete-whisper-small-model");
+	deleteWhisperSmallModel: (modelId?: string) => {
+		return ipcRenderer.invoke("delete-whisper-small-model", modelId);
 	},
 	onWhisperSmallModelDownloadProgress: (
 		callback: (state: {
+			modelId?: string;
 			status: "idle" | "downloading" | "downloaded" | "error";
 			progress: number;
 			path?: string | null;
@@ -747,6 +748,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		const listener = (
 			_event: Electron.IpcRendererEvent,
 			payload: {
+				modelId?: string;
 				status: "idle" | "downloading" | "downloaded" | "error";
 				progress: number;
 				path?: string | null;

@@ -1,14 +1,15 @@
-import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
 import { Separator } from "@heroui/react";
+import type { CSSProperties, FormEvent, RefObject } from "react";
+import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
+import { Button } from "@/components/ui/button";
 import {
-	House,
 	FilmStrip,
+	House,
 	ArrowClockwise as Redo2,
 	ArrowCounterClockwise as Undo2,
 } from "@/components/ui/icons";
-import type { CSSProperties, FormEvent, RefObject } from "react";
-import { Button } from "@/components/ui/button";
 import type { useI18n } from "@/contexts/I18nContext";
+import { recordlyAuthConfigured } from "@/lib/auth/recordlyAuth";
 import type { useExportDimensions } from "../export/useExportDimensions";
 import type { useExportSession } from "../export/useExportSession";
 import type { useExportSettings } from "../export/useExportSettings";
@@ -228,7 +229,7 @@ export function EditorHeader(props: Props) {
 					</Button>
 				</div>
 				{SHOW_PRESETS_BUTTON && <EditorPresetMenu t={t} presets={presets} />}
-				<FeedbackDialog />
+				{recordlyAuthConfigured && <FeedbackDialog />}
 				<EditorExportMenu
 					t={t}
 					exportSettings={exportSettings}

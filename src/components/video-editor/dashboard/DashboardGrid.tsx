@@ -1,12 +1,9 @@
-import { RecordNewButton } from "./RecordNewButton";
-import { RawPreview } from "./RawRecordings";
-import { Cloud, ImageSquare } from "@/components/ui/icons";
-
 import { Button } from "@/components/ui/button";
-
+import { Cloud, ImageSquare } from "@/components/ui/icons";
 import { DashboardSettings } from "./DashboardSettings";
-
 import { ProjectCard } from "./ProjectCard";
+import { RawPreview } from "./RawRecordings";
+import { RecordNewButton } from "./RecordNewButton";
 import type { DashboardProps } from "./types";
 
 import type { DashboardModel } from "./useDashboardModel";

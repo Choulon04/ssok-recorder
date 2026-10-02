@@ -1,10 +1,10 @@
 import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
+import { Button } from "@/components/ui/button";
+import { Cloud, File, GearSix, House, Plus, UserCircle } from "@/components/ui/icons";
+import { recordlyAuthConfigured } from "@/lib/auth/recordlyAuth";
+import { FolderRow } from "./FolderRow";
 import { RecordNewButton } from "./RecordNewButton";
 import { SidebarCards } from "./SidebarCards";
-import { FolderRow } from "./FolderRow";
-import { Cloud, File, GearSix, House, Plus, UserCircle } from "@/components/ui/icons";
-
-import { Button } from "@/components/ui/button";
 
 import type { DashboardProps } from "./types";
 
@@ -49,7 +49,7 @@ export function DashboardSidebar({
 						alt=""
 						className="size-7 rounded-lg"
 					/>
-					<span className="text-[15px] font-semibold tracking-tight">Recordly</span>
+					<span className="text-[15px] font-semibold tracking-tight">쏙레코더</span>
 				</div>
 				<RecordNewButton busy={busy} run={run} className="mb-5 w-full" />
 				<nav className="space-y-1">
@@ -62,18 +62,20 @@ export function DashboardSidebar({
 						<House weight="fill" className="size-[18px]" />
 						Home
 					</Button>
-					<Button
-						variant="ghost"
-						className={navClass(section === "shared")}
-						aria-current={section === "shared" ? "page" : undefined}
-						onClick={() => setSection("shared")}
-					>
-						<Cloud
-							weight={section === "shared" ? "fill" : "regular"}
-							className="size-[18px]"
-						/>
-						Shared
-					</Button>
+					{recordlyAuthConfigured && (
+						<Button
+							variant="ghost"
+							className={navClass(section === "shared")}
+							aria-current={section === "shared" ? "page" : undefined}
+							onClick={() => setSection("shared")}
+						>
+							<Cloud
+								weight={section === "shared" ? "fill" : "regular"}
+								className="size-[18px]"
+							/>
+							Shared
+						</Button>
+					)}
 					<Button
 						variant="ghost"
 						className={navClass(section === "raw")}
@@ -136,7 +138,9 @@ export function DashboardSidebar({
 				</div>
 				<div className="space-y-1 pt-6">
 					<SidebarCards />
-					<FeedbackDialog showLabel className={navClass(false)} onSignIn={onSignIn} />
+					{recordlyAuthConfigured && (
+						<FeedbackDialog showLabel className={navClass(false)} onSignIn={onSignIn} />
+					)}
 					<Button
 						variant="ghost"
 						className={navClass(section === "settings")}
@@ -149,10 +153,12 @@ export function DashboardSidebar({
 						/>
 						Settings
 					</Button>
-					<Button variant="ghost" className={navClass(false)} onClick={onSignIn}>
-						<UserCircle weight="fill" className="size-[18px] shrink-0" />
-						<span className="truncate">{accountLabel || "Sign in"}</span>
-					</Button>
+					{recordlyAuthConfigured && (
+						<Button variant="ghost" className={navClass(false)} onClick={onSignIn}>
+							<UserCircle weight="fill" className="size-[18px] shrink-0" />
+							<span className="truncate">{accountLabel || "Sign in"}</span>
+						</Button>
+					)}
 				</div>
 			</aside>
 		</>

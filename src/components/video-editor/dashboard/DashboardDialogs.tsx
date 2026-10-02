@@ -1,4 +1,3 @@
-import { removeProjectShareLinks } from "../cloud/projectShareLinks";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -7,6 +6,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { removeProjectShareLinks } from "../cloud/projectShareLinks";
 
 import type { DashboardProps } from "./types";
 

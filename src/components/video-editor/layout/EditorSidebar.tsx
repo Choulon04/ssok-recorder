@@ -1,18 +1,19 @@
-import { AccountAvatar } from "@/components/ui/account-avatar";
-import type { User } from "@supabase/supabase-js";
-import { Camera, ClosedCaptioning, Cursor, Gear, FrameCorners } from "@/components/ui/icons";
 import {
-	ToggleButtonGroup,
-	ToggleButton,
 	Button,
-	Tooltip,
 	Card,
-	Switch,
 	Label,
+	Switch,
+	ToggleButton,
+	ToggleButtonGroup,
+	Tooltip,
 } from "@heroui/react";
+import type { User } from "@supabase/supabase-js";
 import type { ComponentProps, ReactNode } from "react";
 import { useMemo, useState } from "react";
+import { AccountAvatar } from "@/components/ui/account-avatar";
+import { Camera, ClosedCaptioning, Cursor, FrameCorners, Gear } from "@/components/ui/icons";
 import type { useI18n } from "@/contexts/I18nContext";
+import { recordlyAuthConfigured } from "@/lib/auth/recordlyAuth";
 import ExtensionManager from "../ExtensionManager";
 import { SettingsPanel } from "../SettingsPanel";
 import type { EditorEffectSection } from "../types";
@@ -104,18 +105,20 @@ export function EditorSidebar({
 						</Tooltip>
 					))}
 				</ToggleButtonGroup>
-				<Tooltip>
-					<Button
-						variant="ghost"
-						isIconOnly
-						className="mt-auto"
-						aria-label="Recordly account"
-						onPress={onAccountClick}
-					>
-						<AccountAvatar user={accountUser} className="!size-7" />
-					</Button>
-					<Tooltip.Content placement="right">Account</Tooltip.Content>
-				</Tooltip>
+				{recordlyAuthConfigured && (
+					<Tooltip>
+						<Button
+							variant="ghost"
+							isIconOnly
+							className="mt-auto"
+							aria-label="SsokRecorder account"
+							onPress={onAccountClick}
+						>
+							<AccountAvatar user={accountUser} className="!size-7" />
+						</Button>
+						<Tooltip.Content placement="right">Account</Tooltip.Content>
+					</Tooltip>
+				)}
 			</nav>
 			<aside
 				aria-label={panelContent ? "Clips" : undefined}

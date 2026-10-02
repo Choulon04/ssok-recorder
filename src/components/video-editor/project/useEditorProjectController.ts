@@ -1,5 +1,5 @@
 import type { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import type { useI18n } from "@/contexts/I18nContext";
 import type { AspectRatio } from "@/utils/aspectRatioUtils";
 import { useAutoCaptionController } from "../captions/useAutoCaptionController";
@@ -80,6 +80,7 @@ type Input = {
 };
 
 export function useEditorProjectController(input: Input) {
+	const pendingFreshCaptionSourcePathRef = useRef<string | null>(null);
 	const snapshot = useProjectSnapshotModel({
 		t: input.t,
 		project: input.project,
@@ -148,6 +149,7 @@ export function useEditorProjectController(input: Input) {
 		devConfig: input.devConfig,
 		videoSourcePath: input.videoSourcePath,
 		pendingFreshRecordingAutoZoomPathRef: input.pendingFreshRecordingAutoZoomPathRef,
+		pendingFreshCaptionSourcePathRef,
 		applyLoadedProject: lifecycle.applyLoadedProject,
 		resetSourceScopedEditorState: lifecycle.resetSourceScopedEditorState,
 		applySessionPresentation: input.applySessionPresentation,
@@ -181,6 +183,7 @@ export function useEditorProjectController(input: Input) {
 		setAutoCaptionSettings: input.timeline.setAutoCaptionSettings,
 		setAutoCaptions: input.timeline.setAutoCaptions,
 		syncActiveVideoSource: lifecycle.syncActiveVideoSource,
+		pendingFreshCaptionSourcePathRef,
 	});
 	const saveActions = useProjectSaveActions({
 		project: input.project,

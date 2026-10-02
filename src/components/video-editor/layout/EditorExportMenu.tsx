@@ -1,13 +1,12 @@
+import { Card, ProgressBar } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { CloudArrowUp } from "@/components/ui/icons";
-import { CloudShareButton } from "../cloud/CloudShareButton";
-import { Card } from "@heroui/react";
-import { ProgressBar } from "@heroui/react";
-import { DownloadSimple as Download } from "@/components/ui/icons";
-import { toast } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
+import { CloudArrowUp, DownloadSimple as Download } from "@/components/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "@/components/ui/toast";
 import type { useI18n } from "@/contexts/I18nContext";
+import { recordlyAuthConfigured } from "@/lib/auth/recordlyAuth";
+import { CloudShareButton } from "../cloud/CloudShareButton";
 import { ExportSettingsMenu } from "../ExportSettingsMenu";
 import type { useExportDimensions } from "../export/useExportDimensions";
 import type { useExportSession } from "../export/useExportSession";
@@ -15,7 +14,7 @@ import type { useExportSettings } from "../export/useExportSettings";
 import type { useExportStatusViewModel } from "../export/useExportStatusViewModel";
 
 type Props = {
- projectPath?: string | null;
+	projectPath?: string | null;
 	t: ReturnType<typeof useI18n>["t"];
 	exportSettings: ReturnType<typeof useExportSettings>;
 	exportSession: ReturnType<typeof useExportSession>;
@@ -341,26 +340,28 @@ export function EditorExportMenu(props: Props) {
 								onExport={handleStartExportFromDropdown}
 								className="rounded-none bg-transparent p-5 shadow-none"
 							/>
-							<div className="px-5 pb-5">
-								<Button
-									variant="secondary"
-									className="w-full"
-									onClick={() => {
-										setShowExportDropdown(false);
-										props.onRequestShareSignIn();
-									}}
-								>
-									<CloudArrowUp className="size-4" />
-									{t("editor.cloud.createShareLink")}
-								</Button>
-							</div>
+							{recordlyAuthConfigured && (
+								<div className="px-5 pb-5">
+									<Button
+										variant="secondary"
+										className="w-full"
+										onClick={() => {
+											setShowExportDropdown(false);
+											props.onRequestShareSignIn();
+										}}
+									>
+										<CloudArrowUp className="size-4" />
+										{t("editor.cloud.createShareLink")}
+									</Button>
+								</div>
+							)}
 						</>
 					)}
 				</PopoverContent>
 			</Popover>
 			{shareOpen && (
 				<CloudShareButton
- projectPath={props.projectPath}
+					projectPath={props.projectPath}
 					hideTrigger
 					open={shareOpen}
 					onOpenChange={setShareOpen}

@@ -1,8 +1,8 @@
 {
 	"app": {
-		"name": "Recordly",
-		"editorTitle": "Recordly Editor",
-		"subtitle": "Screen recording and editing",
+		"name": "SsokRecorder",
+		"editorTitle": "SsokRecorder Editor",
+		"subtitle": "Lecture & tutorial recording and editing",
 		"language": "Language",
 		"manageRecordings": "Open recordings folder"
 	},

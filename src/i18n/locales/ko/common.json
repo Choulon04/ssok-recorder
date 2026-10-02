@@ -1,8 +1,8 @@
 {
 	"app": {
-		"name": "Recordly",
-		"editorTitle": "Recordly 편집기",
-		"subtitle": "화면 녹화 및 편집",
+		"name": "쏙레코더",
+		"editorTitle": "쏙레코더 편집기",
+		"subtitle": "강의·튜토리얼 녹화 및 편집",
 		"language": "언어",
 		"manageRecordings": "녹화 폴더 열기"
 	},

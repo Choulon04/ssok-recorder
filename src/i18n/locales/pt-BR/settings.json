@@ -83,7 +83,7 @@
 		"connectedZoomDuration": "Duração do zoom conectado",
 		"connectedZoomEasing": "Curva de pan conectado",
 		"zoomEasingOptions": {
-			"recordly": "Recordly",
+			"recordly": "SsokRecorder",
 			"glide": "Glide",
 			"smooth": "Smooth",
 			"snappy": "Snappy",
@@ -198,7 +198,9 @@
 			"split": "Split",
 			"merge": "Merge",
 			"delete": "Delete"
-		}
+		},
+		"model": "Model",
+		"autoGenerating": "Generating captions for the new recording…"
 	},
 	"crop": {
 		"title": "Cortar vídeo",
@@ -254,7 +256,7 @@
 		"deleteRegion": "Excluir áudio"
 	},
 	"updates": {
-		"experimentalDescription": "Você ativou as atualizações experimentais, então pode escolher testar a atualização mais recente do Recordly antes que ela fique amplamente disponível.",
+		"experimentalDescription": "Você ativou as atualizações experimentais, então pode escolher testar a atualização mais recente do SsokRecorder antes que ela fique amplamente disponível.",
 		"title": "Atualizações",
 		"experimental": "Atualizações experimentais",
 		"saveFailed": "Falha ao alterar o canal de atualização."

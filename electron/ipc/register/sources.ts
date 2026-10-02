@@ -165,7 +165,8 @@ export function registerSourceHandlers({
 		const ownWindowNames = new Set(
 			[
 				app.getName(),
-				"Recordly",
+				"SsokRecorder",
+				"쏙레코더",
 				...BrowserWindow.getAllWindows().flatMap((win) => {
 					const title = win.getTitle().trim();
 					return title ? [title] : [];

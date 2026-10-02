@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "Recordly",
-		"editorTitle": "Editor Recordly",
+		"name": "SsokRecorder",
+		"editorTitle": "Editor SsokRecorder",
 		"subtitle": "Registrazione e modifica dello schermo",
 		"language": "Lingua",
 		"manageRecordings": "Apri cartella registrazioni"

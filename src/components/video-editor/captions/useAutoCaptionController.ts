@@ -1,5 +1,19 @@
-import { type Dispatch, type SetStateAction, useCallback, useEffect, useRef } from "react";
+import {
+	type Dispatch,
+	type MutableRefObject,
+	type SetStateAction,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { toast } from "@/components/ui/toast";
+import {
+	DEFAULT_WHISPER_MODEL_ID,
+	findWhisperModelByPath,
+	getWhisperModel,
+	type WhisperModelId,
+} from "@/lib/whisperModels";
 import { resolveAutoCaptionSourcePath } from "../autoCaptionSource";
 import { type CaptionEditTarget, updateCaptionCuesForEditedTarget } from "../captionEditing";
 import { resolveVideoUrl } from "../projectPersistence";
@@ -35,6 +49,8 @@ interface UseAutoCaptionControllerParams {
 	setAutoCaptionSettings: Dispatch<SetStateAction<AutoCaptionSettings>>;
 	setAutoCaptions: Dispatch<SetStateAction<CaptionCue[]>>;
 	syncActiveVideoSource: (sourcePath: string, webcamPath?: string | null) => Promise<void>;
+	/** Source path of a just-finished recording that should get captions automatically. */
+	pendingFreshCaptionSourcePathRef: MutableRefObject<string | null>;
 }
 
 export function useAutoCaptionController({
@@ -59,18 +75,42 @@ export function useAutoCaptionController({
 	setAutoCaptionSettings,
 	setAutoCaptions,
 	syncActiveVideoSource,
+	pendingFreshCaptionSourcePathRef,
 }: UseAutoCaptionControllerParams) {
 	const captionGenerationInFlightRef = useRef(false);
 	const activeSourceRef = useRef({ videoSourcePath, videoPath });
 	activeSourceRef.current = { videoSourcePath, videoPath };
+	const [selectedWhisperModelId, setSelectedWhisperModelId] = useState<WhisperModelId>(
+		() => findWhisperModelByPath(whisperModelPath)?.id ?? DEFAULT_WHISPER_MODEL_ID,
+	);
+	const [downloadedWhisperModels, setDownloadedWhisperModels] = useState<
+		Partial<Record<WhisperModelId, string>>
+	>({});
+	const selectedWhisperModelIdRef = useRef(selectedWhisperModelId);
+	selectedWhisperModelIdRef.current = selectedWhisperModelId;
 
 	useEffect(() => {
 		const unsubscribe = window.electronAPI.onWhisperSmallModelDownloadProgress((state) => {
+			const modelId = getWhisperModel(state.modelId).id;
+			if (state.status === "downloaded" && state.path) {
+				const downloadedPath = state.path;
+				setDownloadedWhisperModels((current) => ({
+					...current,
+					[modelId]: downloadedPath,
+				}));
+			} else if (state.status === "idle") {
+				setDownloadedWhisperModels((current) => {
+					const next = { ...current };
+					delete next[modelId];
+					return next;
+				});
+			}
+			if (modelId !== selectedWhisperModelIdRef.current) return;
 			setWhisperModelDownloadStatus(state.status);
 			setWhisperModelDownloadProgress(state.progress);
 			if (state.status === "downloaded") {
 				setDownloadedWhisperModelPath(state.path ?? null);
-				setWhisperModelPath((current) => current ?? state.path ?? null);
+				setWhisperModelPath(state.path ?? null);
 			} else if (state.status === "idle") {
 				setDownloadedWhisperModelPath(null);
 			} else if (state.status === "error" && state.error) {
@@ -78,19 +118,30 @@ export function useAutoCaptionController({
 			}
 		});
 
-		void window.electronAPI.getWhisperSmallModelStatus().then((result) => {
-			if (!result.success) return;
-			if (result.exists && result.path) {
-				setDownloadedWhisperModelPath(result.path);
-				setWhisperModelPath((current) => current ?? result.path ?? null);
-				setWhisperModelDownloadStatus("downloaded");
-				setWhisperModelDownloadProgress(100);
-			} else {
-				setDownloadedWhisperModelPath(null);
-				setWhisperModelDownloadStatus("idle");
-				setWhisperModelDownloadProgress(0);
-			}
-		});
+		void window.electronAPI
+			.getWhisperSmallModelStatus(selectedWhisperModelIdRef.current)
+			.then((result) => {
+				if (!result.success) return;
+				const downloaded = (result.downloaded ?? {}) as Partial<
+					Record<WhisperModelId, string>
+				>;
+				setDownloadedWhisperModels(downloaded);
+				// Fall back to any model already on disk so captions work without a new download.
+				const fallbackPath =
+					result.path ??
+					Object.values(downloaded).find((entry) => Boolean(entry)) ??
+					null;
+				if (fallbackPath) {
+					setDownloadedWhisperModelPath(fallbackPath);
+					setWhisperModelPath((current) => current ?? fallbackPath);
+					setWhisperModelDownloadStatus("downloaded");
+					setWhisperModelDownloadProgress(100);
+				} else {
+					setDownloadedWhisperModelPath(null);
+					setWhisperModelDownloadStatus("idle");
+					setWhisperModelDownloadProgress(0);
+				}
+			});
 
 		return () => unsubscribe?.();
 	}, [
@@ -99,6 +150,30 @@ export function useAutoCaptionController({
 		setWhisperModelDownloadStatus,
 		setWhisperModelPath,
 	]);
+
+	// Keep the picker in sync when the active model changes (presets, fallback on load).
+	useEffect(() => {
+		const matched = findWhisperModelByPath(whisperModelPath);
+		if (matched) setSelectedWhisperModelId(matched.id);
+	}, [whisperModelPath]);
+
+	const handleSelectWhisperModel = useCallback(
+		(modelId: WhisperModelId) => {
+			setSelectedWhisperModelId(modelId);
+			const downloadedPath = downloadedWhisperModels[modelId] ?? null;
+			setDownloadedWhisperModelPath(downloadedPath);
+			setWhisperModelDownloadStatus(downloadedPath ? "downloaded" : "idle");
+			setWhisperModelDownloadProgress(downloadedPath ? 100 : 0);
+			if (downloadedPath) setWhisperModelPath(downloadedPath);
+		},
+		[
+			downloadedWhisperModels,
+			setDownloadedWhisperModelPath,
+			setWhisperModelDownloadProgress,
+			setWhisperModelDownloadStatus,
+			setWhisperModelPath,
+		],
+	);
 
 	const handlePickWhisperExecutable = useCallback(async () => {
 		const result = await window.electronAPI.openWhisperExecutablePicker();
@@ -111,10 +186,10 @@ export function useAutoCaptionController({
 		if (whisperModelDownloadStatus === "downloading") return;
 		setWhisperModelDownloadStatus("downloading");
 		setWhisperModelDownloadProgress(0);
-		const result = await window.electronAPI.downloadWhisperSmallModel();
+		const result = await window.electronAPI.downloadWhisperSmallModel(selectedWhisperModelId);
 		if (!result.success) {
 			setWhisperModelDownloadStatus("error");
-			toast.error(result.error || "Failed to download Whisper small model");
+			toast.error(result.error || "Failed to download Whisper model");
 			return;
 		}
 		if (result.path) {
@@ -122,6 +197,7 @@ export function useAutoCaptionController({
 			setWhisperModelPath(result.path);
 		}
 	}, [
+		selectedWhisperModelId,
 		setDownloadedWhisperModelPath,
 		setWhisperModelDownloadProgress,
 		setWhisperModelDownloadStatus,
@@ -137,18 +213,23 @@ export function useAutoCaptionController({
 	}, [setWhisperModelPath]);
 
 	const handleDeleteWhisperSmallModel = useCallback(async () => {
-		const result = await window.electronAPI.deleteWhisperSmallModel();
+		const deletedPath = downloadedWhisperModels[selectedWhisperModelId] ?? null;
+		const result = await window.electronAPI.deleteWhisperSmallModel(selectedWhisperModelId);
 		if (!result.success) {
-			toast.error(result.error || "Failed to delete Whisper small model");
+			toast.error(result.error || "Failed to delete Whisper model");
 			return;
 		}
-		setWhisperModelPath((current) => (current === downloadedWhisperModelPath ? null : current));
+		setWhisperModelPath((current) =>
+			current === deletedPath || current === downloadedWhisperModelPath ? null : current,
+		);
 		setDownloadedWhisperModelPath(null);
 		setWhisperModelDownloadStatus("idle");
 		setWhisperModelDownloadProgress(0);
-		toast.success("Whisper small model deleted");
+		toast.success("Whisper model deleted");
 	}, [
 		downloadedWhisperModelPath,
+		downloadedWhisperModels,
+		selectedWhisperModelId,
 		setDownloadedWhisperModelPath,
 		setWhisperModelDownloadProgress,
 		setWhisperModelDownloadStatus,
@@ -161,7 +242,7 @@ export function useAutoCaptionController({
 		setIsGeneratingCaptions(true);
 		try {
 			if (!whisperModelPath) {
-				toast.error("Select a Whisper model or download the small model first");
+				toast.error("Select a Whisper model or download one first");
 				return;
 			}
 			let sourcePath = resolveAutoCaptionSourcePath({ videoSourcePath, videoPath });
@@ -230,6 +311,25 @@ export function useAutoCaptionController({
 		whisperModelPath,
 	]);
 
+	// Fresh recordings get captions as soon as the source is loaded and a model is available.
+	useEffect(() => {
+		const pendingPath = pendingFreshCaptionSourcePathRef.current;
+		if (!pendingPath || pendingPath !== videoSourcePath) return;
+		if (!whisperModelPath || isGeneratingCaptions) return;
+		pendingFreshCaptionSourcePathRef.current = null;
+		toast.info(
+			t("settings.captions.autoGenerating", "Generating captions for the new recording…"),
+		);
+		void handleGenerateAutoCaptions();
+	}, [
+		handleGenerateAutoCaptions,
+		isGeneratingCaptions,
+		pendingFreshCaptionSourcePathRef,
+		t,
+		videoSourcePath,
+		whisperModelPath,
+	]);
+
 	const handleSaveAutoCaptionEdit = useCallback(
 		(target: CaptionEditTarget, text: string) => {
 			setAutoCaptions((captions) => updateCaptionCuesForEditedTarget(captions, target, text));
@@ -239,6 +339,9 @@ export function useAutoCaptionController({
 	);
 
 	return {
+		selectedWhisperModelId,
+		downloadedWhisperModels,
+		handleSelectWhisperModel,
 		handlePickWhisperExecutable,
 		handleDownloadWhisperSmallModel,
 		handlePickWhisperModel,
