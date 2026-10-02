@@ -490,6 +490,11 @@ export interface AnnotationRegion {
 	figureData?: FigureData;
 	blurIntensity?: number;
 	blurColor?: string;
+	/**
+	 * "chapter" marks a tutorial step: rendered as a screen-fixed step card (unaffected by
+	 * camera zoom) and listed in the YouTube chapter export. Its text is the chapter title.
+	 */
+	role?: "chapter";
 }
 
 export const DEFAULT_ANNOTATION_POSITION: AnnotationPosition = {

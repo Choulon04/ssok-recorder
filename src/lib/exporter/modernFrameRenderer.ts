@@ -53,7 +53,10 @@ import {
 } from "@/components/video-editor/videoPlayback/motionSmoothing";
 import { getSceneEffectMetrics } from "@/components/video-editor/videoPlayback/sceneEffects";
 import { resolveSceneZoomTarget } from "@/components/video-editor/videoPlayback/sceneMotion";
-import { getWebcamMediaTargetTimeSeconds, isWebcamVisibleAtSourceTime } from "@/components/video-editor/videoPlayback/webcamSync";
+import {
+	getWebcamMediaTargetTimeSeconds,
+	isWebcamVisibleAtSourceTime,
+} from "@/components/video-editor/videoPlayback/webcamSync";
 import {
 	applyZoomTransform,
 	computeZoomTransform,
@@ -370,6 +373,8 @@ export class FrameRenderer {
 	private cursorContainer: Container | null = null;
 	private overlayContainer: Container | null = null;
 	private annotationContainer: Container | null = null;
+	/** Screen-fixed layer for chapter step cards (outside the camera transform). */
+	private chapterAnnotationContainer: Container | null = null;
 	private captionContainer: Container | null = null;
 	private webcamRootContainer: Container | null = null;
 	private webcamContainer: Container | null = null;
@@ -510,6 +515,7 @@ export class FrameRenderer {
 		this.cursorContainer = new Container();
 		this.overlayContainer = new Container();
 		this.annotationContainer = new Container();
+		this.chapterAnnotationContainer = new Container();
 		this.captionContainer = new Container();
 		this.webcamRootContainer = new Container();
 		this.webcamContainer = new Container();
@@ -542,6 +548,7 @@ export class FrameRenderer {
 
 		this.overlayContainer.addChild(this.webcamRootContainer);
 		this.cameraContainer.addChild(this.annotationContainer);
+		this.overlayContainer.addChild(this.chapterAnnotationContainer);
 		this.overlayContainer.addChild(this.captionContainer);
 
 		this.videoMaskGraphics = new Graphics();
@@ -1524,6 +1531,7 @@ export class FrameRenderer {
 		}
 		this.annotationSprites = [];
 		this.annotationContainer.removeChildren();
+		this.chapterAnnotationContainer?.removeChildren();
 
 		const annotations = [...(this.config.annotationRegions ?? [])].sort(
 			(first, second) => first.zIndex - second.zIndex,
@@ -1560,7 +1568,11 @@ export class FrameRenderer {
 			const sprite = new Sprite(texture);
 			sprite.position.set(x, y);
 			sprite.visible = false;
-			this.annotationContainer.addChild(sprite);
+			const targetContainer =
+				annotation.role === "chapter" && this.chapterAnnotationContainer
+					? this.chapterAnnotationContainer
+					: this.annotationContainer;
+			targetContainer.addChild(sprite);
 			this.annotationSprites.push({ annotation, sprite, texture });
 		}
 	}
@@ -2725,7 +2737,12 @@ export class FrameRenderer {
 
 	private updateWebcamOverlay(referenceTimeSeconds = this.currentVideoTime): void {
 		const webcam = this.config.webcam;
-		if (!webcam?.enabled || !isWebcamVisibleAtSourceTime(webcam, referenceTimeSeconds) || !this.webcamRootContainer || !this.webcamMaskGraphics) {
+		if (
+			!webcam?.enabled ||
+			!isWebcamVisibleAtSourceTime(webcam, referenceTimeSeconds) ||
+			!this.webcamRootContainer ||
+			!this.webcamMaskGraphics
+		) {
 			if (this.webcamRootContainer) {
 				this.webcamRootContainer.visible = false;
 			}
@@ -2960,10 +2977,14 @@ export class FrameRenderer {
 	private async renderOutput(timeMs: number): Promise<void> {
 		if (this.hasActiveBlurAnnotations(timeMs)) {
 			const annotationContainerVisible = this.annotationContainer?.visible ?? true;
+			const chapterContainerVisible = this.chapterAnnotationContainer?.visible ?? true;
 			const captionContainerVisible = this.captionContainer?.visible ?? true;
 
 			if (this.annotationContainer) {
 				this.annotationContainer.visible = false;
+			}
+			if (this.chapterAnnotationContainer) {
+				this.chapterAnnotationContainer.visible = false;
 			}
 			if (this.captionContainer) {
 				this.captionContainer.visible = false;
@@ -2973,6 +2994,9 @@ export class FrameRenderer {
 
 			if (this.annotationContainer) {
 				this.annotationContainer.visible = annotationContainerVisible;
+			}
+			if (this.chapterAnnotationContainer) {
+				this.chapterAnnotationContainer.visible = chapterContainerVisible;
 			}
 			if (this.captionContainer) {
 				this.captionContainer.visible = captionContainerVisible;
@@ -3261,6 +3285,7 @@ export class FrameRenderer {
 		this.cursorContainer = null;
 		this.overlayContainer = null;
 		this.annotationContainer = null;
+		this.chapterAnnotationContainer = null;
 		this.captionContainer = null;
 		this.webcamRootContainer = null;
 		this.webcamContainer = null;

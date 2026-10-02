@@ -1,5 +1,6 @@
 import type { Span } from "dnd-timeline";
 import { type Dispatch, type MutableRefObject, type SetStateAction, useCallback } from "react";
+import { createChapterAnnotation, getChapterNumberAt } from "../chapterMarkers";
 import {
 	type AnnotationRegion,
 	DEFAULT_ANNOTATION_POSITION,
@@ -44,6 +45,35 @@ export function useAnnotationRegionCommands({
 				trackIndex,
 			};
 			setAnnotationRegions((current) => [...current, newRegion]);
+			onSelectAnnotation(id);
+			setSelectedZoomId(null);
+		},
+		[
+			onSelectAnnotation,
+			nextAnnotationIdRef,
+			nextAnnotationZIndexRef,
+			setAnnotationRegions,
+			setSelectedZoomId,
+		],
+	);
+
+	/** Adds a tutorial step marker at `startMs`; `makeTitle` receives its 1-based step number. */
+	const handleChapterAdded = useCallback(
+		(startMs: number, totalMs: number, makeTitle: (stepNumber: number) => string) => {
+			if (!(totalMs > 0)) return;
+			const id = `annotation-${nextAnnotationIdRef.current++}`;
+			const zIndex = nextAnnotationZIndexRef.current++;
+			setAnnotationRegions((current) => {
+				const region = createChapterAnnotation({
+					id,
+					startMs,
+					totalMs,
+					title: makeTitle(getChapterNumberAt(current, startMs)),
+					zIndex,
+					regions: current,
+				});
+				return region ? [...current, region] : current;
+			});
 			onSelectAnnotation(id);
 			setSelectedZoomId(null);
 		},
@@ -167,6 +197,7 @@ export function useAnnotationRegionCommands({
 
 	return {
 		handleAnnotationAdded,
+		handleChapterAdded,
 		handleAnnotationSpanChange,
 		handleAnnotationDelete,
 		handleAnnotationContentChange,

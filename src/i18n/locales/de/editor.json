@@ -168,7 +168,10 @@
 		"experimentalBuilds": "Tipp: Aktiviere den Zugriff auf experimentelle Builds in den Einstellungen",
 		"cursorAppearance": "Tipp: Du kannst das Aussehen deines Cursors anpassen"
 	},
-	"account": { "title": "Konto", "comingSoon": "Konto demnächst verfügbar" },
+	"account": {
+		"title": "Konto",
+		"comingSoon": "Konto demnächst verfügbar"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Es ist nichts kaputt, aber wir können kein animiertes Cursor-Overlay rendern.",
 		"description": "Ihr Gerät unterstützt keine native Erfassung. Dies kann verschiedene Gründe haben, die wir noch nicht ermittelt haben. SsokRecorder funktioniert weiterhin, aber eine Cursor-Glättung ist nicht möglich.",
@@ -194,5 +197,11 @@
 		"expand": "Zeitleiste erweitern",
 		"collapse": "Zeitleiste reduzieren"
 	},
-	"openRecordingsFolder": "Aufnahmeordner öffnen"
+	"openRecordingsFolder": "Aufnahmeordner öffnen",
+	"chapters": {
+		"copy": "Copy YouTube chapters ({{count}})",
+		"copied": "YouTube chapters copied. Paste them into the video description.",
+		"copiedWithWarning": "Chapters copied. YouTube needs at least 3 chapters, each 10s or longer.",
+		"copyFailed": "Could not copy chapters"
+	}
 }

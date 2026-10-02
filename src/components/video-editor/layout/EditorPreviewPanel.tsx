@@ -238,6 +238,12 @@ export function EditorPreviewPanel(props: Props) {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="start">
 							<DropdownMenuItem
+								onClick={() => timelineRef.current?.addChapter()}
+								className="cursor-pointer text-muted-foreground hover:bg-foreground/10 hover:text-foreground"
+							>
+								{t("timeline.chapter.add", "Step marker (M)")}
+							</DropdownMenuItem>
+							<DropdownMenuItem
 								onClick={() => {
 									const nextTrack =
 										timeline.annotationRegions.length > 0

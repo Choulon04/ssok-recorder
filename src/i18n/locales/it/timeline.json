@@ -37,5 +37,11 @@
 	},
 	"addSpeed": "Aggiungi velocità (S)",
 	"resizeLeft": "Ridimensiona a sinistra",
-	"resizeRight": "Ridimensiona a destra"
+	"resizeRight": "Ridimensiona a destra",
+	"chapter": {
+		"label": "Step",
+		"add": "Step marker (M)",
+		"defaultTitle": "Step {{n}}",
+		"intro": "Intro"
+	}
 }

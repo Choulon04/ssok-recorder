@@ -1,4 +1,5 @@
 import type { RefObject } from "react";
+import { useI18n } from "@/contexts/I18nContext";
 import type { useVideoEditorAudio } from "../audio/useVideoEditorAudio";
 import { retimeCaptionFragment } from "../captionTimeline";
 import type { useAnnotationRegionCommands } from "../hooks/useAnnotationRegionCommands";
@@ -35,6 +36,7 @@ type Props = {
 };
 
 export function EditorTimelinePanel(props: Props) {
+	const { t } = useI18n();
 	const {
 		timelineRef,
 		timeline,
@@ -139,6 +141,11 @@ export function EditorTimelinePanel(props: Props) {
 				captionQuickAddEnabled={timeline.autoCaptionSettings.timelineQuickAdd}
 				annotationRegions={timeline.annotationRegions}
 				onAnnotationAdded={annotationCommands.handleAnnotationAdded}
+				onChapterAdded={(startMs, totalMs) =>
+					annotationCommands.handleChapterAdded(startMs, totalMs, (stepNumber) =>
+						t("timeline.chapter.defaultTitle", "Step {{n}}", { n: stepNumber }),
+					)
+				}
 				onAnnotationSpanChange={annotationCommands.handleAnnotationSpanChange}
 				onAnnotationDelete={annotationCommands.handleAnnotationDelete}
 				selectedAnnotationId={timeline.selectedAnnotationId}

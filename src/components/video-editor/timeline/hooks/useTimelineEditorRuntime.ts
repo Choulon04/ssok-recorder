@@ -49,6 +49,8 @@ interface UseTimelineEditorRuntimeParams {
 	onSelectClip?: (id: string | null) => void;
 	annotationRegions: AnnotationRegion[];
 	onAnnotationAdded?: (span: Span, trackIndex?: number) => void;
+	/** Adds a tutorial step marker at the playhead (timeline ms). */
+	onChapterAdded?: (startMs: number, totalMs: number) => void;
 	onAnnotationSpanChange?: (id: string, span: Span, trackIndex?: number) => void;
 	onAnnotationDelete?: (id: string) => void;
 	selectedAnnotationId?: string | null;
@@ -99,6 +101,7 @@ export function useTimelineEditorRuntime({
 	onSelectClip,
 	annotationRegions,
 	onAnnotationAdded,
+	onChapterAdded,
 	onAnnotationSpanChange,
 	onAnnotationDelete,
 	selectedAnnotationId,
@@ -260,6 +263,11 @@ export function useTimelineEditorRuntime({
 		[videoDuration, totalMs, currentTimeMs, defaultRegionDurationMs, onAnnotationAdded],
 	);
 
+	const handleAddChapter = useCallback(() => {
+		if (!videoDuration || totalMs === 0 || !onChapterAdded) return;
+		onChapterAdded(currentTimeMs, totalMs);
+	}, [videoDuration, totalMs, currentTimeMs, onChapterAdded]);
+
 	useTimelineKeyboardShortcuts({
 		isMac,
 		keyShortcuts,
@@ -278,6 +286,7 @@ export function useTimelineEditorRuntime({
 		handleAddZoom,
 		handleSplitClip,
 		handleAddAnnotation: () => handleAddAnnotation(),
+		handleAddChapter,
 		deleteSelectedKeyframe,
 		deleteSelectedZoom,
 		deleteSelectedClip,
@@ -294,10 +303,12 @@ export function useTimelineEditorRuntime({
 			suggestZooms: handleSuggestZooms,
 			splitClip: handleSplitClip,
 			addAnnotation: handleAddAnnotation,
+			addChapter: handleAddChapter,
 			addAudio: handleAddAudio,
 			keyframes,
 		}),
 		[
+			handleAddChapter,
 			handleAddAnnotation,
 			handleAddAudio,
 			handleAddZoom,

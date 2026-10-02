@@ -91,7 +91,6 @@
 		"solidColor": "Color Sólido (Censura)",
 		"borderRadius": "Radio del Borde"
 	},
-
 	"fontStyles": {
 		"classic": "Clásico",
 		"editor": "Editor",
@@ -169,7 +168,10 @@
 		"experimentalBuilds": "Consejo: Activa el acceso a versiones experimentales en la configuración",
 		"cursorAppearance": "Consejo: Puedes personalizar la apariencia del cursor"
 	},
-	"account": { "title": "Cuenta", "comingSoon": "Cuenta próximamente" },
+	"account": {
+		"title": "Cuenta",
+		"comingSoon": "Cuenta próximamente"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Nada está roto, pero no podremos renderizar una superposición de cursor animada.",
 		"description": "Tu dispositivo no es compatible con la captura nativa. Esto puede deberse a varias razones que todavía no hemos identificado. SsokRecorder seguirá funcionando, pero hará imposible el suavizado del cursor.",
@@ -195,5 +197,11 @@
 		"expand": "Expandir línea de tiempo",
 		"collapse": "Contraer línea de tiempo"
 	},
-	"openRecordingsFolder": "Abrir carpeta de grabaciones"
+	"openRecordingsFolder": "Abrir carpeta de grabaciones",
+	"chapters": {
+		"copy": "Copy YouTube chapters ({{count}})",
+		"copied": "YouTube chapters copied. Paste them into the video description.",
+		"copiedWithWarning": "Chapters copied. YouTube needs at least 3 chapters, each 10s or longer.",
+		"copyFailed": "Could not copy chapters"
+	}
 }

@@ -1,4 +1,5 @@
 import { Separator } from "@heroui/react";
+import type { YouTubeChapterList } from "../chapterMarkers";
 import type { CSSProperties, FormEvent, RefObject } from "react";
 import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,8 @@ type Props = {
 	exportDimensions: ReturnType<typeof useExportDimensions>;
 	exportStatus: ReturnType<typeof useExportStatusViewModel>;
 	hasCaptionsForSidecar: boolean;
+	youtubeChapters: YouTubeChapterList;
+	chapterCount: number;
 	nvidiaCudaExportAvailable: boolean;
 	experimentalNvidiaCudaExport: boolean;
 	setExperimentalNvidiaCudaExport: (enabled: boolean) => void;
@@ -237,6 +240,8 @@ export function EditorHeader(props: Props) {
 					exportDimensions={exportDimensions}
 					exportStatus={exportStatus}
 					hasCaptionsForSidecar={hasCaptionsForSidecar}
+					youtubeChapters={props.youtubeChapters}
+					chapterCount={props.chapterCount}
 					nvidiaCudaExportAvailable={nvidiaCudaExportAvailable}
 					experimentalNvidiaCudaExport={experimentalNvidiaCudaExport}
 					setExperimentalNvidiaCudaExport={setExperimentalNvidiaCudaExport}

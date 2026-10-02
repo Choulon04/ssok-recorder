@@ -646,6 +646,7 @@ export function normalizeProjectEditor(editor: Partial<ProjectEditorState>): Pro
 						trackIndex: isFiniteNumber(region.trackIndex)
 							? Math.max(0, Math.floor(region.trackIndex))
 							: 0,
+						...(region.role === "chapter" ? { role: "chapter" as const } : {}),
 					};
 				})
 		: [];

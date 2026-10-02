@@ -37,5 +37,11 @@
 	},
 	"addSpeed": "속도 추가 (S)",
 	"resizeLeft": "왼쪽 크기 조절",
-	"resizeRight": "오른쪽 크기 조절"
+	"resizeRight": "오른쪽 크기 조절",
+	"chapter": {
+		"label": "단계",
+		"add": "단계 마커 (M)",
+		"defaultTitle": "{{n}}단계",
+		"intro": "인트로"
+	}
 }

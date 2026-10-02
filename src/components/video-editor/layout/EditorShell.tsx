@@ -1,4 +1,5 @@
 import { type ComponentProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { buildYouTubeChapterList, getChapters } from "../chapterMarkers";
 import { EditorAnnouncementBanner } from "@/components/announcements/EditorAnnouncementBanner";
 import { RecordlySignInDialog, type SignInReason } from "@/components/auth/RecordlySignInDialog";
 import { useRecordlyAuth } from "@/components/auth/useRecordlyAuth";
@@ -261,6 +262,12 @@ export function EditorShell(props: Props) {
 				exportDimensions={exportDimensions}
 				exportStatus={exportStatus}
 				hasCaptionsForSidecar={hasCaptionsForSidecar}
+				youtubeChapters={buildYouTubeChapterList(
+					getChapters(timeline.annotationRegions),
+					projection.timelineDuration * 1000,
+					t("timeline.chapter.intro", "Intro"),
+				)}
+				chapterCount={getChapters(timeline.annotationRegions).length}
 				nvidiaCudaExportAvailable={nvidiaCudaExportAvailable}
 				experimentalNvidiaCudaExport={experimentalNvidiaCudaExport}
 				setExperimentalNvidiaCudaExport={setExperimentalNvidiaCudaExport}

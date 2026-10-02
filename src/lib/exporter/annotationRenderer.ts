@@ -379,6 +379,8 @@ export async function renderAnnotations(
 	};
 
 	for (const annotation of sortedAnnotations) {
+		// Chapter step cards are screen-fixed: they ignore the camera zoom transform.
+		const annotationTransform = annotation.role === "chapter" ? undefined : sceneTransform;
 		const rect = transformAnnotationRect(
 			{
 				x: annotationRect.x + (annotation.position.x / 100) * annotationRect.width,
@@ -386,10 +388,10 @@ export async function renderAnnotations(
 				width: (annotation.size.width / 100) * annotationRect.width,
 				height: (annotation.size.height / 100) * annotationRect.height,
 			},
-			sceneTransform,
+			annotationTransform,
 		);
 		const { x, y, width, height } = rect;
-		const effectiveScaleFactor = scaleFactor * (sceneTransform?.scale ?? 1);
+		const effectiveScaleFactor = scaleFactor * (annotationTransform?.scale ?? 1);
 
 		switch (annotation.type) {
 			case "text":

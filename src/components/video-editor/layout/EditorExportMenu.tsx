@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { toast } from "@/components/ui/toast";
 import type { useI18n } from "@/contexts/I18nContext";
 import { recordlyAuthConfigured } from "@/lib/auth/recordlyAuth";
+import type { YouTubeChapterList } from "../chapterMarkers";
 import { CloudShareButton } from "../cloud/CloudShareButton";
 import { ExportSettingsMenu } from "../ExportSettingsMenu";
 import type { useExportDimensions } from "../export/useExportDimensions";
@@ -21,6 +22,8 @@ type Props = {
 	exportDimensions: ReturnType<typeof useExportDimensions>;
 	exportStatus: ReturnType<typeof useExportStatusViewModel>;
 	hasCaptionsForSidecar: boolean;
+	youtubeChapters: YouTubeChapterList;
+	chapterCount: number;
 	nvidiaCudaExportAvailable: boolean;
 	experimentalNvidiaCudaExport: boolean;
 	setExperimentalNvidiaCudaExport: (enabled: boolean) => void;
@@ -340,6 +343,51 @@ export function EditorExportMenu(props: Props) {
 								onExport={handleStartExportFromDropdown}
 								className="rounded-none bg-transparent p-5 shadow-none"
 							/>
+							{props.chapterCount > 0 && (
+								<div className="px-5 pb-3">
+									<Button
+										variant="outline"
+										className="w-full"
+										onClick={() => {
+											const { text, warnings } = props.youtubeChapters;
+											void navigator.clipboard.writeText(text).then(
+												() => {
+													if (warnings.length > 0) {
+														toast.info(
+															t(
+																"editor.chapters.copiedWithWarning",
+																"Chapters copied. YouTube needs at least 3 chapters, each 10s or longer.",
+															),
+														);
+													} else {
+														toast.success(
+															t(
+																"editor.chapters.copied",
+																"YouTube chapters copied. Paste them into the video description.",
+															),
+														);
+													}
+												},
+												() =>
+													toast.error(
+														t(
+															"editor.chapters.copyFailed",
+															"Could not copy chapters",
+														),
+													),
+											);
+										}}
+									>
+										{t(
+											"editor.chapters.copy",
+											"Copy YouTube chapters ({{count}})",
+											{
+												count: props.chapterCount,
+											},
+										)}
+									</Button>
+								</div>
+							)}
 							{recordlyAuthConfigured && (
 								<div className="px-5 pb-5">
 									<Button
