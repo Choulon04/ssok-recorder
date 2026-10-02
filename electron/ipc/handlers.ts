@@ -4,6 +4,7 @@ import { registerAssetHandlers } from "./register/assets";
 import { registerCaptionHandlers } from "./register/captions";
 import { registerCloudShareHandlers } from "./register/cloudShare";
 import { registerExportHandlers } from "./register/export";
+import { registerNarrationHandlers } from "./register/narration";
 import { registerPermissionHandlers } from "./register/permissions";
 import { registerProjectHandlers } from "./register/project";
 import { registerRecordingHandlers } from "./register/recording";
@@ -70,6 +71,7 @@ export function registerIpcHandlers(
 	registerAssetHandlers();
 	registerExportHandlers();
 	registerCaptionHandlers();
+	registerNarrationHandlers();
 	registerCloudShareHandlers();
 	registerProjectHandlers();
 	registerSettingsHandlers();

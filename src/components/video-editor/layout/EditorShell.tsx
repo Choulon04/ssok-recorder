@@ -371,6 +371,7 @@ export function EditorShell(props: Props) {
 						playback={playback}
 						zoomCommands={zoomCommands}
 						annotationCommands={annotationCommands}
+						audioCommands={audioCommands}
 						effectiveCursorTelemetry={cursor.effectiveCursorTelemetry}
 						effectiveShowCursor={effectiveShowCursor}
 						isCropped={ui.isCropped}

@@ -758,6 +758,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.on("whisper-small-model-download-progress", listener);
 		return () => ipcRenderer.removeListener("whisper-small-model-download-progress", listener);
 	},
+	getNarrationSettings: () => {
+		return ipcRenderer.invoke("narration:get-settings");
+	},
+	saveNarrationSettings: (update: {
+		voiceId?: string;
+		model?: string;
+		speed?: number;
+		apiKey?: string | null;
+	}) => {
+		return ipcRenderer.invoke("narration:save-settings", update);
+	},
+	synthesizeNarration: (text: string) => {
+		return ipcRenderer.invoke("narration:synthesize", text);
+	},
 	generateAutoCaptions: (options: {
 		videoPath: string;
 		whisperExecutablePath?: string;

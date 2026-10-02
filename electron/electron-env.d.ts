@@ -66,6 +66,7 @@ interface UpdateStatusSummary {
 }
 
 type RendererRecordingSessionData = import("./ipc/types").RecordingSessionData;
+type NarrationSettingsView = import("./ipc/narration/fishTts").NarrationSettingsView;
 
 interface RendererFfmpegAudioMuxMetrics {
 	tempVideoWriteMs?: number;
@@ -723,6 +724,25 @@ interface Window {
 				error?: string;
 			}) => void,
 		) => () => void;
+		getNarrationSettings: () => Promise<{
+			success: boolean;
+			settings?: NarrationSettingsView;
+			error?: string;
+		}>;
+		saveNarrationSettings: (update: {
+			voiceId?: string;
+			model?: string;
+			speed?: number;
+			/** New key to store; null or "" removes the stored key. */
+			apiKey?: string | null;
+		}) => Promise<{ success: boolean; settings?: NarrationSettingsView; error?: string }>;
+		synthesizeNarration: (text: string) => Promise<{
+			success: boolean;
+			path?: string;
+			durationMs?: number;
+			cached?: boolean;
+			error?: string;
+		}>;
 		generateAutoCaptions: (options: {
 			videoPath: string;
 			whisperExecutablePath?: string;

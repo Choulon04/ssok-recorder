@@ -203,5 +203,29 @@
 		"copied": "YouTube chapters copied. Paste them into the video description.",
 		"copiedWithWarning": "Chapters copied. YouTube needs at least 3 chapters, each 10s or longer.",
 		"copyFailed": "Could not copy chapters"
+	},
+	"narration": {
+		"menu": "Narration (TTS)",
+		"title": "Add narration (TTS)",
+		"description": "Each paragraph becomes one voice line on its own audio track. Separate paragraphs with a blank line.",
+		"script": "Script",
+		"scriptPlaceholder": "Hello! Today we'll record the screen.\n\nFirst, press the record button.",
+		"lineCount": "{{count}} lines",
+		"placement": "Placement",
+		"placeSequential": "From playhead, back to back",
+		"placeChapters": "One per step marker ({{count}})",
+		"voice": "Fish Audio voice ID",
+		"speed": "Speed",
+		"apiKey": "Fish Audio API key",
+		"apiKeySaved": "Saved — enter a new key to replace",
+		"apiKeyMissing": "Paste your API key",
+		"removeKey": "Remove",
+		"apiKeyNote": "Stored encrypted on this computer and only sent to api.fish.audio.",
+		"generate": "Generate and add",
+		"generating": "Generating {{done}}/{{total}}…",
+		"added": "Added {{count}} narration lines",
+		"partiallyPlaced": "Added {{placed}} of {{total}} lines; the rest ran past the end of the video.",
+		"lineFailed": "Narration line {{n}} failed",
+		"saveFailed": "Could not save settings"
 	}
 }

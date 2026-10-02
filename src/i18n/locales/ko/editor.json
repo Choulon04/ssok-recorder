@@ -203,5 +203,29 @@
 		"copied": "유튜브 챕터를 복사했습니다. 영상 설명란에 붙여넣으세요.",
 		"copiedWithWarning": "챕터를 복사했습니다. 유튜브는 챕터가 3개 이상, 각 10초 이상이어야 인식합니다.",
 		"copyFailed": "챕터를 복사하지 못했습니다"
+	},
+	"narration": {
+		"menu": "나레이션 (TTS)",
+		"title": "나레이션 추가 (TTS)",
+		"description": "문단 하나가 음성 한 줄이 되어 별도 오디오 트랙에 들어갑니다. 문단은 빈 줄로 구분하세요.",
+		"script": "대본",
+		"scriptPlaceholder": "안녕하세요! 오늘은 화면 녹화를 해보겠습니다.\n\n먼저 녹화 버튼을 누르세요.",
+		"lineCount": "{{count}}줄",
+		"placement": "배치",
+		"placeSequential": "재생 위치부터 이어서",
+		"placeChapters": "단계 마커마다 한 줄씩 ({{count}}개)",
+		"voice": "Fish Audio 목소리 ID",
+		"speed": "속도",
+		"apiKey": "Fish Audio API 키",
+		"apiKeySaved": "저장됨 — 바꾸려면 새 키 입력",
+		"apiKeyMissing": "API 키를 붙여넣으세요",
+		"removeKey": "삭제",
+		"apiKeyNote": "이 컴퓨터에 암호화되어 저장되며 api.fish.audio 로만 전송됩니다.",
+		"generate": "생성해서 추가",
+		"generating": "생성 중 {{done}}/{{total}}…",
+		"added": "나레이션 {{count}}줄을 추가했습니다",
+		"partiallyPlaced": "{{total}}줄 중 {{placed}}줄만 추가했습니다. 나머지는 영상 끝을 넘어갑니다.",
+		"lineFailed": "나레이션 {{n}}번째 줄 생성 실패",
+		"saveFailed": "설정을 저장하지 못했습니다"
 	}
 }
