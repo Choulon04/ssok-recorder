@@ -102,6 +102,10 @@
 		"rect": "Box (R)",
 		"color": "Color {{n}}",
 		"undo": "Undo (Ctrl+Z)",
-		"clear": "Clear (C)"
+		"clear": "Clear (C)",
+		"finish": "Finish (Esc)",
+		"recordToolbar": "Show pen toolbar in the recording",
+		"recordToolbarOn": "Pen toolbar is recorded",
+		"recordToolbarOff": "Pen toolbar is hidden from the recording"
 	}
 }

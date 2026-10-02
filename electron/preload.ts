@@ -764,7 +764,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	setLivePenActive: (active: boolean) => {
 		return ipcRenderer.invoke("live-pen:set-active", active);
 	},
-	updateLivePenSettings: (update: { tool?: string; color?: string; width?: number }) => {
+	updateLivePenSettings: (update: {
+		tool?: string;
+		color?: string;
+		width?: number;
+		showToolbarInRecording?: boolean;
+	}) => {
 		return ipcRenderer.invoke("live-pen:update-settings", update);
 	},
 	sendLivePenCommand: (command: "undo" | "clear") => {

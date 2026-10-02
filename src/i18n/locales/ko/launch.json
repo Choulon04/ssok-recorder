@@ -102,6 +102,10 @@
 		"rect": "사각형 (R)",
 		"color": "색상 {{n}}",
 		"undo": "되돌리기 (Ctrl+Z)",
-		"clear": "모두 지우기 (C)"
+		"clear": "모두 지우기 (C)",
+		"finish": "끝내기 (Esc)",
+		"recordToolbar": "펜 툴바를 녹화에 포함",
+		"recordToolbarOn": "펜 툴바가 녹화에 포함됩니다",
+		"recordToolbarOff": "펜 툴바는 녹화에 나오지 않습니다"
 	}
 }

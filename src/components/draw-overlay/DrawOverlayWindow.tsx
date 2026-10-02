@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { LivePenControls } from "../launch/LivePenControls";
 import {
 	appendPenPoint,
 	PEN_COLORS,
@@ -12,6 +13,7 @@ export interface PenSettings {
 	tool: PenTool;
 	color: string;
 	width: number;
+	showToolbarInRecording?: boolean;
 }
 
 export const DEFAULT_PEN_SETTINGS: PenSettings = { tool: "pen", color: PEN_COLORS[0], width: 6 };
@@ -20,14 +22,15 @@ const TOOL_KEYS: Record<string, PenTool> = { p: "pen", h: "highlighter", a: "arr
 
 /**
  * Full-screen transparent canvas shown over the recorded display while live pen is on.
- * It is deliberately chrome-free: everything drawn here ends up in the recording, so the
- * controls live in the (capture-protected) recording HUD instead.
+ * Everything drawn here ends up in the recording, so by default the controls live in the
+ * (capture-protected) recording HUD; the toolbar only appears here when the user opts in.
  */
 export function DrawOverlayWindow() {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const strokesRef = useRef<PenStroke[]>([]);
 	const activeStrokeRef = useRef<PenStroke | null>(null);
 	const settingsRef = useRef<PenSettings>(DEFAULT_PEN_SETTINGS);
+	const [showToolbar, setShowToolbar] = useState(false);
 
 	const redraw = useCallback(() => {
 		const canvas = canvasRef.current;
@@ -63,6 +66,7 @@ export function DrawOverlayWindow() {
 
 	const applySettings = useCallback((next: Partial<PenSettings>) => {
 		settingsRef.current = { ...settingsRef.current, ...next };
+		setShowToolbar(Boolean(settingsRef.current.showToolbarInRecording));
 	}, []);
 
 	useEffect(() => {
@@ -73,6 +77,8 @@ export function DrawOverlayWindow() {
 		const offSettings = window.electronAPI.onLivePenSettings?.((settings) =>
 			applySettings(settings),
 		);
+		// The settings push on window show can arrive before this lazy page subscribes.
+		void window.electronAPI.getLivePenState?.().then((state) => applySettings(state.settings));
 		const offCommand = window.electronAPI.onLivePenCommand?.((command) => {
 			if (command === "undo") undo();
 			else if (command === "clear") clear();
@@ -114,7 +120,8 @@ export function DrawOverlayWindow() {
 		if (event.button !== 0) return;
 		event.currentTarget.setPointerCapture(event.pointerId);
 		const point = pointFromEvent(event);
-		activeStrokeRef.current = { ...settingsRef.current, points: [point] };
+		const { tool, color, width } = settingsRef.current;
+		activeStrokeRef.current = { tool, color, width, points: [point] };
 		redraw();
 	};
 
@@ -139,21 +146,29 @@ export function DrawOverlayWindow() {
 	};
 
 	return (
-		<canvas
-			ref={canvasRef}
-			onPointerDown={handlePointerDown}
-			onPointerMove={handlePointerMove}
-			onPointerUp={handlePointerUp}
-			onPointerCancel={handlePointerUp}
-			style={{
-				position: "fixed",
-				inset: 0,
-				width: "100vw",
-				height: "100vh",
-				cursor: "crosshair",
-				touchAction: "none",
-				background: "transparent",
-			}}
-		/>
+		<>
+			<canvas
+				ref={canvasRef}
+				onPointerDown={handlePointerDown}
+				onPointerMove={handlePointerMove}
+				onPointerUp={handlePointerUp}
+				onPointerCancel={handlePointerUp}
+				style={{
+					position: "fixed",
+					inset: 0,
+					width: "100vw",
+					height: "100vh",
+					cursor: "crosshair",
+					touchAction: "none",
+					background: "transparent",
+				}}
+			/>
+			{showToolbar && (
+				// Lives in the overlay window, so it is recorded on purpose.
+				<div className="fixed left-1/2 top-4 z-10 -translate-x-1/2">
+					<LivePenControls variant="overlay" />
+				</div>
+			)}
+		</>
 	);
 }
